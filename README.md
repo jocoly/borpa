@@ -41,9 +41,7 @@ The bot takes user prompts for Stable Diffusion image-generation and GPT text-co
 
 ### 3. Copy the backend URL that outputs once the server is loaded.
 
-### 4. Create a new .env file in the /bot/ directory and replace the placeholders below with your access info.
-
-  .env
+### 4. Create a new .env file in the /bot/ directory; add the following the the file and provide your tokens, backend URL and image directory path.
 
   TOKEN=DISCORD APPLICATION TOKEN GOES HERE
 
