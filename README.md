@@ -1,6 +1,6 @@
-# A hobby project by jocoly.
+# borpa: A Discord bot that generates AI images and text completions based on user-provided prompts.
 
-
+## A hobby project by jocoly.
 
 ## To run:
 
