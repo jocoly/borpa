@@ -1,6 +1,6 @@
 # borpa
 
-## A hobby project by jocoly. I hooked up the backend from [saharmor/dalle-ployground](https://github.com/saharmor/dalle-playground) to a Discord bot interface.
+## A hobby project by jocoly. I hooked up the Stable Diffusion backend server from [saharmor/dalle-playground](https://github.com/saharmor/dalle-playground) to a Discord bot interface.
 
 ## The bot takes user prompts for Stable Diffusion image-generation and GPT text-completion and replies with the generated content.
 
