@@ -1,14 +1,23 @@
 # A hobby project by jocoly.
 
+
+
 ## To run:
 
-### You need the following:
+### Requirements:
+
 **-an Nvidia CUDA-enabled GPU (not required but dramatically speeds up image processing)**
+
   -[Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus)
+  
 **-a valid Discord application token**
+
   -[Reactiflux guide on creating a new Discord bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)
+  
 **-a valid OpenAI API token (required for GPT completion but not needed for Stable Diffusion access)**
+
   -[OpenAI API Key Manager](https://platform.openai.com/account/api-keys)
+  
 **-Python3 and pip package installer**
 
   **For Linux users:**
