@@ -49,7 +49,7 @@ The bot takes user prompts for Stable Diffusion image-generation and GPT text-co
 
   OUTPUT_DIR=/PATH/TO/IMAGE/DIRECTORY/ // Generated images are saved locally.
 
-  OPENAI_TOKEN=OPENAI TOKEN GOES HERE // required for GPT completion but not needed for Stable Diffusion access
+  OPENAI_TOKEN=OPENAI TOKEN GOES HERE // required for GPT completion but not needed for Stable Diffusion image generation
 
   OPENAI_MODEL="text-davinci-003" // the default OpenAI language model used if the user does not provide one
 
