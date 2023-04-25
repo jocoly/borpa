@@ -22,9 +22,9 @@
 
 | Requirements | Description |
 | ----------- | ----------- |
-| **an Nvidia CUDA-enabled GPU (not required but dramatically speeds up image processing)** | [Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus) |
-| **a valid Discord application token** | [Reactiflux guide on creating a new Discord bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) |
-| **a valid OpenAI API token (required for GPT completion but not needed for Stable Diffusion access)** | [OpenAI API Key Manager](https://platform.openai.com/account/api-keys) |
+| **An Nvidia CUDA-enabled GPU (not required but dramatically speeds up image processing)** | [Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus) |
+| **A valid Discord application token** | [Reactiflux guide on creating a new Discord bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) |
+| **A valid OpenAI API token (required for GPT completion but not needed for Stable Diffusion access)** | [OpenAI API Key Manager](https://platform.openai.com/account/api-keys) |
 | **Python3 and pip package installer** | **For Linux users:**<br />`sudo apt upgrade`<br />`sudo apt install python3`<br />`sudo apt install pip`<br />**For Mac users:**<br />`brew install python3`<br />`brew install pip`<br />**For Windows users:**<br />-[Download from python.org and run the installer](https://www.python.org/downloads/)<br />`python get-pip.py` |
 | **NodeJS** | **For Linux users:**<br />`sudo apt upgrade`<br />`sudo apt install node.js`<br />**For Mac users:**<br />`brew install node.js`<br />**For Windows users:**<br />-[Download from nodejs.org and run the installer](https://nodejs.org/en/download) |
 | **PyTorch** | [PyTorch installation guide.](https://pytorch.org/get-started/locally/) |
