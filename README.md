@@ -1,8 +1,8 @@
-### A hobby project by jocoly.
+# A hobby project by jocoly.
 
 ## To run:
 
-# You need the following:
+### You need the following:
 **-an Nvidia CUDA-enabled GPU (not required but dramatically speeds up image processing)**
   -[Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus)
 **-a valid Discord application token**
@@ -33,16 +33,16 @@
 
   
 
-**1. Open a terminal window at the project directory and download dependencies.**
+### 1. Open a terminal window at the project directory and download dependencies.
 >cd backend && pip install -r requirements.txt
 
 
-**2. Start the backend server:
+### 2. Start the backend server:
 >python3 app.py --port 8080 // or your preferred port
 
-**3. Copy the backend URL that outputs once the server is loaded.
+### 3. Copy the backend URL that outputs once the server is loaded.
 
-**4. Create a new .env file in the /bot/ directory and replace the placeholders below with your access info.**
+### 4. Create a new .env file in the /bot/ directory and replace the placeholders below with your access info.
 
 >.env
 >
@@ -58,7 +58,7 @@
 
 **The bot should now be online. Type !test to generate a test message.**
 
-##Supported Commands:
+## Supported Commands:
   >!borpachat <PROMPT GOES HERE>
   -Sends a GPT completion generated with the prompt that follows the command.
   
