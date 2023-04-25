@@ -4,28 +4,12 @@
 
 ## To run:
 
-### Requirements:
-
-| Syntax | Description |
+| Requirements | Description |
 | ----------- | ----------- |
-| Header | Title |
-| Paragraph | Text |
-
-**an Nvidia CUDA-enabled GPU (not required but dramatically speeds up image processing)**
-
-  -[Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus)
-  
-**a valid Discord application token**
-
-  -[Reactiflux guide on creating a new Discord bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)
-  
-**a valid OpenAI API token (required for GPT completion but not needed for Stable Diffusion access)**
-
-  -[OpenAI API Key Manager](https://platform.openai.com/account/api-keys)
-  
-**Python3 and pip package installer**
-
-  **For Linux users:**
+| **an Nvidia CUDA-enabled GPU (not required but dramatically speeds up image processing)** | [Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus) |
+| **a valid Discord application token | [Reactiflux guide on creating a new Discord bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) |
+| **a valid OpenAI API token (required for GPT completion but not needed for Stable Diffusion access)** | [OpenAI API Key Manager](https://platform.openai.com/account/api-keys) |
+| **Python3 and pip package installer** | **For Linux users:**
   
   `sudo apt upgrade`
   
@@ -42,10 +26,8 @@
   **For Windows users:**
   -[Download from python.org and run the installer](https://www.python.org/downloads/)
   
-  `python get-pip.py`
-**NodeJS**
-
-  **For Linux users:**
+  `python get-pip.py`|
+| **NodeJS** | **For Linux users:**
   
   `sudo apt upgrade`
   
@@ -57,13 +39,9 @@
   
   **For Windows users:**
   
-  -[Download from nodejs.org and run the installer](https://nodejs.org/en/download)
-  
-**PyTorch**
+  -[Download from nodejs.org and run the installer](https://nodejs.org/en/download) |
+| **PyTorch** | [PyTorch installation guide.](https://pytorch.org/get-started/locally/) |
 
-  -[PyTorch installation guide.](https://pytorch.org/get-started/locally/)
-
-  
 
 ### 1. Open a terminal window at the project directory and download dependencies.
 >cd backend && pip install -r requirements.txt
