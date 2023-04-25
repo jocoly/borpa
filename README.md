@@ -1,6 +1,22 @@
-# borpa: A Discord bot that generates AI images and text completions based on user-provided prompts.
+# borpa
 
-## A hobby project by jocoly.
+## A hobby project by jocoly. I hooked up the backend from [saharmor/dalle-ployground](https://github.com/saharmor/dalle-playground) to a Discord bot interface.
+
+## The bot takes user prompts for Stable Diffusion image-generation and GPT text-completion and replies with the generated content.
+
+## Supported Commands:
+  `!test`
+  -Sends a test response to show that the bot is working.
+
+  `!borpachat <PROMPT GOES HERE>`
+  -Sends a GPT completion generated with the prompt that follows the command.
+  
+  `!borpadraw <PROMPT GOES HERE>`
+  -Sends a Stable Diffusion image generated with the prompt that follows the command.
+  
+  `!borpadraw2 <PROMPT GOES HERE>`
+  -Sends two Stable Diffusion images generated with the prompt that follows the command.
+  -Takes twice as long as !borpadraw
 
 ## To run:
 
@@ -42,18 +58,4 @@ OPENAI_MODEL="text-davinci-003" // the default OpenAI language model used if the
 `cd bot && node bot.js`
 
 **The bot should now be online. Type !test to generate a test message.**
-
-## Supported Commands:
-  `!test`
-  -Sends a test response to show that the bot is working.
-
-  `!borpachat <PROMPT GOES HERE>`
-  -Sends a GPT completion generated with the prompt that follows the command.
-  
-  `!borpadraw <PROMPT GOES HERE>`
-  -Sends a Stable Diffusion image generated with the prompt that follows the command.
-  
-  `!borpadraw2 <PROMPT GOES HERE>`
-  -Sends two Stable Diffusion images generated with the prompt that follows the command.
-  -Takes twice as long as !borpadraw
   
