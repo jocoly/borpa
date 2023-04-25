@@ -22,7 +22,6 @@ const configuration = new Configuration ({
 });
 const openai = new OpenAIApi(configuration)
 
-let numImages = 1;
 let confirmationMessage = "";
 let queueMessage;
 
@@ -42,12 +41,7 @@ async function processQueue(prompt, numImages) {
         return;
     }
     prompt = msg.content.replace(/^!(borpadraw2|borpadraw)\s*/, "");
-    if (numImages > 1) {
-        confirmationMessage = await msg.reply(`Generating ${numImages} images...`);
-    }
-    else {
-        confirmationMessage = await msg.reply(`Generating image...`);
-    }
+    confirmationMessage = await msg.reply(`Generating image(s)...`);
     try {
         const results = await Promise.race([
             callDalleService(process.env.BACKEND_URL, prompt, numImages),
@@ -118,19 +112,17 @@ client.on(Events.MessageCreate, async msg => {
     }
 
     if (msg.content.includes("!borpadraw2")) {
-        numImages = 2;
         let prompt = msg.content
         queue.requests.push(msg);
         queue.position[msg.author.id] = queue.requests.length;
         queueMessage = await msg.reply(`Image prompt queued. There are ${queue.requests.length} requests ahead of you.`);
-        await processQueue(prompt, numImages)
+        await processQueue(prompt, 2)
     } else if (msg.content.includes("!borpadraw")) {
-        numImages = 1;
         let prompt = msg.content
         queue.requests.push(msg);
         queue.position[msg.author.id] = queue.requests.length;
         queueMessage = await msg.reply(`Image prompt queued. There are ${queue.requests.length} requests ahead of you.`);
-        await processQueue(prompt, numImages)
+        await processQueue(prompt, 1)
     }
 
     if (msg.content.includes("!borpachat")){

@@ -5,6 +5,7 @@ from pathlib import Path
 from io import BytesIO
 import time
 
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from stable_diffusion_wrapper import StableDiffusionWrapper
@@ -24,6 +25,8 @@ parser.add_argument("--img_format", type = str.lower, default = "JPEG", help = "
 parser.add_argument("--output_dir", type = str, default = DEFAULT_IMG_OUTPUT_DIR, help = "Customer directory for generated images")
 args = parser.parse_args()
 
+load_dotenv()
+
 @app.route("/generate", methods=["POST"])
 @cross_origin()
 def generate_images_api():
@@ -33,7 +36,7 @@ def generate_images_api():
     generated_imgs = stable_diff_model.generate_images(text_prompt, num_images)
 
     returned_generated_images = []
-    dir_name = '/media/jocoly/BigChungus/dalle-images'
+    dir_name = os.getenv("OUTPUT_DIR")
     Path(dir_name).mkdir(parents=True, exist_ok=True)
     
     for idx, img in enumerate(generated_imgs):
