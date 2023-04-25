@@ -43,17 +43,17 @@ The bot takes user prompts for Stable Diffusion image-generation and GPT text-co
 
 ### 4. Create a new .env file in the /bot/ directory and replace the placeholders below with your access info.
 
-`.env
+  .env
 
-TOKEN=<YOUR DISCORD APPLICATION TOKEN GOES HERE>
+  TOKEN=<YOUR DISCORD APPLICATION TOKEN GOES HERE>
 
-BACKEND_URL=<BACKEND URL GOES HERE>
+  BACKEND_URL=<BACKEND URL GOES HERE>
 
-OUTPUT_DIR=/path/to/image/directory/ // Generated images are saved locally.
+  OUTPUT_DIR=/path/to/image/directory/ // Generated images are saved locally.
 
-OPENAI_TOKEN=<YOUR OPENAI TOKEN GOES HERE> // required for GPT completion but not needed for Stable Diffusion access
+  OPENAI_TOKEN=<YOUR OPENAI TOKEN GOES HERE> // required for GPT completion but not needed for Stable Diffusion access
 
-OPENAI_MODEL="text-davinci-003" // the default OpenAI language model used if the user does not provide one`
+  OPENAI_MODEL="text-davinci-003" // the default OpenAI language model used if the user does not provide one
 
 
 ### 5. Open a new terminal window at the project directory and start the bot.**
