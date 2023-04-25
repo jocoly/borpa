@@ -11,21 +11,21 @@
   -[OpenAI API Key Manager](https://platform.openai.com/account/api-keys)
 **-Python3 and pip package installer**
   **For Linux users:**
-  >sudo apt upgrade
-  >sudo apt install python3
-  >sudo apt install pip
+  `sudo apt upgrade`
+  `sudo apt install python3`
+  `sudo apt install pip`
   **For Mac users:**
-  >brew install python3
-  >brew install pip
+  `brew install python3`
+  `brew install pip`
   **For Windows users:**
   -[Download from python.org and run the installer](https://www.python.org/downloads/)
-  >python get-pip.py
+  `python get-pip.py`
 **-NodeJS**
   **For Linux users:**
-  >sudo apt upgrade
-  >sudo apt install node.js
+  `sudo apt upgrade`
+  `sudo apt install node.js`
   **For Mac users:**
-  >brew install node.js
+  `brew install node.js`
   **For Windows users:**
   -[Download from nodejs.org and run the installer](https://nodejs.org/en/download)
 **-PyTorch**
@@ -38,34 +38,37 @@
 
 
 ### 2. Start the backend server:
->python3 app.py --port 8080 // or your preferred port
+`python3 app.py --port 8080 // or your preferred port`
 
 ### 3. Copy the backend URL that outputs once the server is loaded.
 
 ### 4. Create a new .env file in the /bot/ directory and replace the placeholders below with your access info.
 
->.env
+`.env
 >
->TOKEN=<YOUR DISCORD APPLICATION TOKEN GOES HERE>
->BACKEND_URL=<BACKEND URL GOES HERE>
->OUTPUT_DIR=/path/to/image/directory/ // Generated images are saved locally.
->OPENAI_TOKEN=<YOUR OPENAI TOKEN GOES HERE> // required for GPT completion but not needed for Stable Diffusion access
->OPENAI_MODEL="text-davinci-003" // the default OpenAI language model used if the user does not provide one
+TOKEN=<YOUR DISCORD APPLICATION TOKEN GOES HERE>
+BACKEND_URL=<BACKEND URL GOES HERE>
+OUTPUT_DIR=/path/to/image/directory/ // Generated images are saved locally.
+OPENAI_TOKEN=<YOUR OPENAI TOKEN GOES HERE> // required for GPT completion but not needed for Stable Diffusion access
+OPENAI_MODEL="text-davinci-003" // the default OpenAI language model used if the user does not provide one`
 
 
 **5. Open a new terminal window at the project directory and start the bot.**
->cd bot && node bot.js
+`cd bot && node bot.js`
 
 **The bot should now be online. Type !test to generate a test message.**
 
 ## Supported Commands:
-  >!borpachat <PROMPT GOES HERE>
+  `!test`
+  -Sends a test response to show that the bot is working.
+
+  `!borpachat <PROMPT GOES HERE>`
   -Sends a GPT completion generated with the prompt that follows the command.
   
-  >!borpadraw <PROMPT GOES HERE>
+  `!borpadraw <PROMPT GOES HERE>`
   -Sends a Stable Diffusion image generated with the prompt that follows the command.
   
-  >!borpadraw2 <PROMPT GOES HERE>
+  `!borpadraw2 <PROMPT GOES HERE>`
   -Sends two Stable Diffusion images generated with the prompt that follows the command.
   -Takes twice as long as !borpadraw
   
