@@ -16,7 +16,7 @@
   
   `!borpadraw2 <PROMPT GOES HERE>`
   -Sends two Stable Diffusion images generated with the prompt that follows the command.
-  -Takes twice as long as !borpadraw
+  (Takes twice as long as !borpadraw)
 
 ## To run:
 
