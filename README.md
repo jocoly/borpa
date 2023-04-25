@@ -6,6 +6,11 @@
 
 ### Requirements:
 
+| Syntax | Description |
+| ----------- | ----------- |
+| Header | Title |
+| Paragraph | Text |
+
 **an Nvidia CUDA-enabled GPU (not required but dramatically speeds up image processing)**
 
   -[Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus)
