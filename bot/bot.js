@@ -41,14 +41,11 @@ async function processQueue(prompt, numImages) {
         processing = false;
         return;
     }
-    if (numImages === 1) {
-        prompt = msg.content.replace(/^!borpadraw /, "");
-    } else if (numImages > 1) {
-        prompt = msg.content.replace(/^!borpadraw[0-9]/, "");
-    }
+    prompt = msg.content.replace(/^!(borpadraw2|borpadraw)\s*/, "");
     if (numImages > 1) {
         confirmationMessage = await msg.reply(`Generating ${numImages} images...`);
-    } else {
+    }
+    else {
         confirmationMessage = await msg.reply(`Generating image...`);
     }
     try {
@@ -122,14 +119,14 @@ client.on(Events.MessageCreate, async msg => {
 
     if (msg.content.includes("!borpadraw2")) {
         numImages = 2;
-        let prompt = msg.content.replace(/^!borpadraw2 /, "");
+        let prompt = msg.content
         queue.requests.push(msg);
         queue.position[msg.author.id] = queue.requests.length;
         queueMessage = await msg.reply(`Image prompt queued. There are ${queue.requests.length} requests ahead of you.`);
         await processQueue(prompt, numImages)
     } else if (msg.content.includes("!borpadraw")) {
         numImages = 1;
-        let prompt = msg.content.replace(/^!borpadraw /, "");
+        let prompt = msg.content
         queue.requests.push(msg);
         queue.position[msg.author.id] = queue.requests.length;
         queueMessage = await msg.reply(`Image prompt queued. There are ${queue.requests.length} requests ahead of you.`);
