@@ -33,16 +33,13 @@ def generate_images_api():
     generated_imgs = stable_diff_model.generate_images(text_prompt, num_images)
 
     returned_generated_images = []
-    if args.save_to_disk:
-        dir_name = os.path.join(args.output_dir,f"{time.strftime('%Y-%m-%d_%H-%M-%S')}_{text_prompt}")[:MAX_FILE_NAME_LEN]
-        Path(dir_name).mkdir(parents=True, exist_ok=True)
+    dir_name = '/media/jocoly/BigChungus/dalle-images'
+    Path(dir_name).mkdir(parents=True, exist_ok=True)
     
     for idx, img in enumerate(generated_imgs):
-        if args.save_to_disk: 
-          img.save(os.path.join(dir_name, f'{idx}.{args.img_format}'), format=args.img_format)
-
+        img.save(os.path.join(dir_name, f'{idx}.png'), format='png')
         buffered = BytesIO()
-        img.save(buffered, format=args.img_format)
+        img.save(buffered, format='png')
         img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
         returned_generated_images.append(img_str)
 
