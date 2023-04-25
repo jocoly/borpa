@@ -15,7 +15,7 @@
 
 
 ### 1. Open a terminal window at the project directory and download dependencies.
->cd backend && pip install -r requirements.txt
+`cd backend && pip install -r requirements.txt`
 
 
 ### 2. Start the backend server:
