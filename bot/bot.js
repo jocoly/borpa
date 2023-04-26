@@ -15,6 +15,7 @@ const client = new Client({intents: [
 
 const queue = {requests: [], position: {}};
 await clearQueue();
+
 let processing = false;
 
 const configuration = new Configuration ({
@@ -22,26 +23,27 @@ const configuration = new Configuration ({
 });
 const openai = new OpenAIApi(configuration)
 
-let confirmationMessage = "";
+let confirmationMessage;
 let queueMessage;
 
 async function processQueue(prompt, numImages) {
-    if (processing) {
+    if (processing) { // currently one at a time
         return;
     }
     processing = true;
-    const msg = queue.requests.shift();
-    if (!msg || !msg.author || queue.position[msg.author.id] > 1) {
-        const numRequestsInQueue = queue.requests.length;
-        if (msg && msg.author && !queue.position[msg.author.id]) {
-            queue.position[msg.author.id] = 1;
-            queueMessage = await msg.reply(`Image prompt queued. There are ${numRequestsInQueue} requests ahead of you.`);
-        }
+    const msg = queue.requests.length > 0 ? queue.requests.shift() : undefined; // shift only if queue is not empty
+    if (!msg) {
         processing = false;
         return;
     }
-    prompt = msg.content.replace(/^!(borpadraw2|borpadraw)\s*/, "");
+    prompt = msg.content.replace(/^!(borpadraw2 |borpadraw )\s*/, ""); // replace the prompt prefix if it's still there
     confirmationMessage = await msg.reply(`Generating image(s)...`);
+    if (confirmationMessage) {  // timeout to avoid trying to delete an empty message
+        if (queueMessage.deletable) queueMessage.delete().catch(()=> null);
+        setTimeout(() => {
+            if (queueMessage.deletable) queueMessage.delete().catch(() => null);
+        }, 5000);
+    }
     try {
         const results = await Promise.race([
             callDalleService(process.env.BACKEND_URL, prompt, numImages),
@@ -60,6 +62,12 @@ async function processQueue(prompt, numImages) {
                     const message = await msg.channel.messages.fetch(msg.id).catch(() => null);
                     if (message) {
                         try {
+                            if (confirmationMessage) {  // timeout to avoid trying to delete an empty message
+                                if (confirmationMessage.deletable) confirmationMessage.delete().catch(()=> null);
+                                setTimeout(() => {
+                                    if (confirmationMessage.deletable) confirmationMessage.delete().catch(() => null);
+                                }, 5000);
+                            }
                             await message.reply({files: [result.imageFilePath]});
                         } catch (error) {
                             console.error('Error sending image:', error);
@@ -67,20 +75,19 @@ async function processQueue(prompt, numImages) {
                     } else {
                         console.error('Message not found:', msg.id);
                     }
-
                 } catch (error) {
                     console.error('Error sending image:', error)
                 }
             }
         }
-        if (queue.requests.length === 0 || queue.position[msg.author.id] > 1) {
+        if (queue.requests.length === 0) {
             processing = false;
         }
     } catch (error) {
-        console.error('Error generating DALL-E image:', error);
-        await msg.reply('Error generating DALL-E image. Please try again later.');
+        console.error('Error generating image:', error);
+        await msg.reply('Error generating image. Please try again later.');
         queue.position[msg.author.id] = undefined;
-        if (queue.requests.length === 0 || queue.position[msg.author.id] > 1) {
+        if (queue.requests.length === 0) {
             processing = false;
         }
     }
@@ -106,9 +113,10 @@ client.once(Events.ClientReady, c => {
     console.log(`Logged in as ${client.user.tag}.`);
 });
 client.on(Events.MessageCreate, async msg => {
+    if (msg.channel.id !== process.env.DISCORD_CHANNEL_ID) return;
     if (msg.author.id === client.user.id) return;
     if (msg.content === "!test") {
-        return msg.channel.send("<:borpaLove:1076241086739140729>");
+        return msg.channel.send("<:borpaLove:1100565172684328970>");
     }
 
     if (msg.content.includes("!borpadraw2")) {
@@ -134,6 +142,19 @@ client.on(Events.MessageCreate, async msg => {
             temperature: 0.7
         });
         msg.reply(prompt + "\n" + completion.data.choices[0].text);
+    }
+
+    if (msg.content.includes("!optimize")) {
+        let prompt = msg.content.replace(/^!optimize /, "");
+        let optimizationString = "Give me an optimized AI image prompt to help make better quality images based on the following subject. You should be detailed, describing the scene, the camera or art style, color styles, textures, etc. The subject is: "
+        prompt = optimizationString + prompt
+        let completion = await openai.createCompletion({
+            model: process.env.OPENAI_MODEL,
+            prompt: prompt,
+            max_tokens: 250,
+            temperature: 0.7
+        });
+        msg.reply(completion.data.choices[0].text)
     }
 });
 

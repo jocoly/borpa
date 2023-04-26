@@ -6,19 +6,26 @@ I hooked up the Stable Diffusion backend server from [saharmor/dalle-playground]
 
 The bot takes user prompts for Stable Diffusion image-generation and GPT text-completion and replies with the generated content.
 
+Currently running with SD 2.0 in the backend, and using the text-davinci-003 language model.
+
+Provide an OpenAI token for the text completion.
+
 ## Supported Commands:
   `!test`
   -Sends a test response to show that the bot is working.
 
   `!borpachat <PROMPT GOES HERE>`
-  -Sends a GPT completion generated with the prompt that follows the command.
+  -Sends a GPT text completion generated with the prompt that follows the command.
   
   `!borpadraw <PROMPT GOES HERE>`
   -Sends a Stable Diffusion image generated with the prompt that follows the command.
   
   `!borpadraw2 <PROMPT GOES HERE>`
   -Sends two Stable Diffusion images generated with the prompt that follows the command.
-  (Takes twice as long as !borpadraw)
+  (Takes twice as long as !borpadraw :wink:)
+
+  `!borpaoptimize <PROMPT GOES HERE>`
+  -Uses the GPT language model to generate a detailed prompt for the 
 
 ## To run:
 
@@ -53,6 +60,9 @@ The bot takes user prompts for Stable Diffusion image-generation and GPT text-co
 
   OPENAI_MODEL="text-davinci-003" // the default OpenAI language model used if the user does not provide one
 
+  CONTAIN_BORPA=true // true forces borpa to ignore messages from all but the provided channel
+
+  DISCORD_CHANNEL_ID=CHANNEL ID GOES HERE // if CONTAIN_BORPA=true then this is the only channel borpa will read
 
 ### 5. Open a new terminal window at the project directory and start the bot.**
 `cd bot && node bot.js`
