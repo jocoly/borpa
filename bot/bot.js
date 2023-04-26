@@ -5,6 +5,7 @@ import {Configuration, OpenAIApi} from 'openai';
 import * as fs from "fs";
 
 const TIMEOUT = 600000
+const CONTAIN_BORPA = process.env.CONTAIN_BORPA //set to 'true' if you want borpa to be contained to one channel
 
 const client = new Client({intents: [
         GatewayIntentBits.Guilds,
@@ -113,7 +114,7 @@ client.once(Events.ClientReady, c => {
     console.log(`Logged in as ${client.user.tag}.`);
 });
 client.on(Events.MessageCreate, async msg => {
-    if (msg.channel.id !== process.env.DISCORD_CHANNEL_ID) return;
+    if (CONTAIN_BORPA && msg.channel.id !== process.env.DISCORD_CHANNEL_ID) return;
     if (msg.author.id === client.user.id) return;
     if (msg.content === "!test") {
         return msg.channel.send("<:borpaLove:1100565172684328970>");
