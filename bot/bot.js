@@ -5,7 +5,11 @@ import {Configuration, OpenAIApi} from 'openai';
 import * as fs from "fs";
 
 const TIMEOUT = 600000
-const CONTAIN_BORPA = process.env.CONTAIN_BORPA //set to 'true' if you want borpa to be contained to one channel
+
+let CONTAIN_BORPA = false;
+if (process.env.CONTAIN_BORPA === 'true') {
+    CONTAIN_BORPA = true //set to 'true' if you want borpa to be contained to one channel
+}
 
 const client = new Client({intents: [
         GatewayIntentBits.Guilds,
@@ -37,7 +41,7 @@ async function processQueue(prompt, numImages) {
         processing = false;
         return;
     }
-    prompt = msg.content.replace(/^!(borpadraw2 |borpadraw )\s*/, ""); // replace the prompt prefix if it's still there
+    prompt = msg.content.replace(/^!(borpadraw2|borpadraw)\s*/, ""); // replace the prompt prefix if it's still there
     confirmationMessage = await msg.reply(`Generating image(s)...`);
     if (confirmationMessage) {  // timeout to avoid trying to delete an empty message
         if (queueMessage.deletable) queueMessage.delete().catch(()=> null);
@@ -110,31 +114,54 @@ async function clearQueue() {
     queue.requests = [];
 }
 
+async function borpaDrawSomething() {
+    const PRIMARY_CHANNEL = await client.channels.fetch(process.env.DISCORD_CHANNEL_ID)
+    const prompt = "Come up with a creative, descriptive prompt for an AI generated image for me. It can be anything.";
+    let completion = await openai.createCompletion({
+        model: process.env.OPENAI_MODEL,
+        prompt: prompt,
+        max_tokens: 250,
+        temperature: 0.7
+    });
+    await PRIMARY_CHANNEL.send("!medraw " + completion.data.choices[0].text)
+}
+
 client.once(Events.ClientReady, c => {
     console.log(`Logged in as ${client.user.tag}.`);
 });
+
+setInterval(borpaDrawSomething, 3600000) // generate borpa's own image every hour
 client.on(Events.MessageCreate, async msg => {
     if (CONTAIN_BORPA && msg.channel.id !== process.env.DISCORD_CHANNEL_ID) return;
-    if (msg.author.id === client.user.id) return;
+    if (msg.author.id === client.user.id && !msg.content.includes("!medraw")) return;
     if (msg.content === "!test") {
         return msg.channel.send("<:borpaLove:1100565172684328970>");
     }
 
-    if (msg.content.includes("!borpadraw2")) {
+    if (msg.content.includes("!borpadraw2") || msg.content.includes("!draw2")) {
         let prompt = msg.content
         queue.requests.push(msg);
         queue.position[msg.author.id] = queue.requests.length;
         queueMessage = await msg.reply(`Image prompt queued. There are ${queue.requests.length} requests ahead of you.`);
         await processQueue(prompt, 2)
-    } else if (msg.content.includes("!borpadraw")) {
+    } else if (msg.content.includes("!borpadrawsomething") || msg.content.includes("!drawsomething")) {
+        borpaDrawSomething();
+    } else if (msg.content.includes("!borpadraw") || msg.content.includes("!draw")) {
         let prompt = msg.content
         queue.requests.push(msg);
         queue.position[msg.author.id] = queue.requests.length;
         queueMessage = await msg.reply(`Image prompt queued. There are ${queue.requests.length} requests ahead of you.`);
         await processQueue(prompt, 1)
     }
+    if (msg.content.includes("!medraw") && msg.author.id === client.user.id) {
+        let prompt = msg.content.replace("!medraw ", "")
+        queue.requests.push(msg);
+        queue.position[msg.author.id] = queue.requests.length;
+        queueMessage = await msg.reply(`Image prompt queued. There are ${queue.requests.length} requests ahead of you.`);
+        await processQueue(prompt, 1)
+    }
 
-    if (msg.content.includes("!borpachat")){
+    if (msg.content.includes("!borpachat") || msg.content.includes("!chat")){
         let prompt = msg.content.replace(/^!borpachat /, "");
         let completion = await openai.createCompletion({
             model: process.env.OPENAI_MODEL,
@@ -145,16 +172,26 @@ client.on(Events.MessageCreate, async msg => {
         msg.reply(prompt + "\n" + completion.data.choices[0].text);
     }
 
-    if (msg.content.includes("!optimize")) {
+    if (msg.content.includes("!borpaoptimize") || msg.content.includes("!optimize")) {
         let prompt = msg.content.replace(/^!optimize /, "");
-        let optimizationString = "Give me an optimized AI image prompt to help make better quality images based on the following subject. You should be detailed, describing the scene, the camera or art style, color styles, textures, etc. The subject is: "
-        prompt = optimizationString + prompt
+        let optimizationStringArray = [
+            "Give me an optimized AI image prompt to help make better quality images based on the following subject. You should be detailed, describing the scene, the camera or art style, color styles, textures, etc. The subject is: ",
+            "Create a descriptive AI image prompt to show off the engine's ability to create beautiful art based on this subject: ",
+            "Create a descriptive AI image prompt to show off the engine's ability to create realistic art based on this subject: ",
+            "Take this prompt and modify it with details that will optimize for a better AI generated image: ",
+            "Optimize this prompt for AI image generation: ",
+            "Optimize this prompt for AI image generation so that it will show off the engine's ability to create unique art: ",
+            "Rewrite this prompt so that it will provide better results when run through an AI image generator: "
+        ]
+        let randomIndex = Math.floor(Math.random() * (optimizationStringArray.length - 1))
+        prompt = optimizationStringArray[randomIndex] + prompt;
         let completion = await openai.createCompletion({
             model: process.env.OPENAI_MODEL,
             prompt: prompt,
             max_tokens: 250,
             temperature: 0.7
         });
+        console.log(optimizationStringArray[randomIndex])
         msg.reply(completion.data.choices[0].text)
     }
 });
