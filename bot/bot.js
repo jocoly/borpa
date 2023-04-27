@@ -123,7 +123,7 @@ async function borpaDrawSomething() {
         max_tokens: 250,
         temperature: 0.7
     });
-    await PRIMARY_CHANNEL.send("!medraw " + completion.data.choices[0].text)
+    await PRIMARY_CHANNEL.send("!medraw" + completion.data.choices[0].text)
 }
 
 client.once(Events.ClientReady, c => {
@@ -154,7 +154,7 @@ client.on(Events.MessageCreate, async msg => {
         await processQueue(prompt, 1)
     }
     if (msg.content.includes("!medraw") && msg.author.id === client.user.id) {
-        let prompt = msg.content.replace("!medraw ", "")
+        let prompt = msg.content.replace("!medraw", "")
         queue.requests.push(msg);
         queue.position[msg.author.id] = queue.requests.length;
         queueMessage = await msg.reply(`Image prompt queued. There are ${queue.requests.length} requests ahead of you.`);
@@ -176,10 +176,10 @@ client.on(Events.MessageCreate, async msg => {
         let prompt = msg.content.replace(/^!optimize /, "");
         let optimizationStringArray = [
             "Give me an optimized AI image prompt to help make better quality images based on the following subject. You should be detailed, describing the scene, the camera or art style, color styles, textures, etc. The subject is: ",
-            "Create a descriptive AI image prompt to show off the engine's ability to create beautiful art based on this subject: ",
-            "Create a descriptive AI image prompt to show off the engine's ability to create realistic art based on this subject: ",
-            "Take this prompt and modify it with details that will optimize for a better AI generated image: ",
-            "Optimize this prompt for AI image generation: ",
+            "Create a descriptive AI image prompt to show off the engine's ability to create beautiful art based on this subject. You should be extremely detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
+            "Create a descriptive AI image prompt to show off the engine's ability to create realistic art based on this subject. You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
+            "Take this prompt and modify it with details that will optimize for a better AI generated image You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
+            "Optimize this prompt for AI image generation. Be descriptive so that the result is very high quality: ",
             "Optimize this prompt for AI image generation so that it will show off the engine's ability to create unique art: ",
             "Rewrite this prompt so that it will provide better results when run through an AI image generator: "
         ]
