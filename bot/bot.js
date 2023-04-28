@@ -1,8 +1,9 @@
-import {} from 'dotenv/config'
-import {Client, Events, GatewayIntentBits} from 'discord.js'
-import { callDalleService } from "./backend_api.js";
+import {} from 'dotenv/config';
+import {Client, Events, GatewayIntentBits} from 'discord.js';
+import {callDalleService} from "./backend_api.js";
 import {Configuration, OpenAIApi} from 'openai';
 import * as fs from "fs";
+
 
 const TIMEOUT = 600000
 
@@ -11,9 +12,10 @@ const optimizationStringArray = [
     "Create a descriptive AI image prompt to show off the engine's ability to create beautiful art based on this subject. You should be extremely detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
     "Create a descriptive AI image prompt to show off the engine's ability to create realistic art based on this subject. You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
     "Take this prompt and modify it with details that will optimize for a better AI generated image You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
-    "Optimize this prompt for AI image generation. Be descriptive so that the result is very high quality: ",
-    "Optimize this prompt for AI image generation so that it will show off the engine's ability to create unique art: ",
-    "Rewrite this prompt so that it will provide better results when run through an AI image generator: "
+    "Describe a picture you want commissioned based on this prompt. You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
+    "Describe a painting you want commissioned based on this prompt. You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
+    "Describe a piece of art you want create based on this prompt. You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
+    "Add more details to this prompt so that it can be used to generate a thought-provoking image: ",
 ]
 
 let CONTAIN_BORPA = false;
@@ -52,7 +54,7 @@ async function processQueue(prompt, numImages) {
         processing = false;
         return;
     }
-    prompt = msg.content.replace(/^!(borpadraw2|borpadraw|medraw)\s*/, ""); // replace the prompt prefix if it's still there
+    prompt = msg.content.replace(/^!(borpadraw2|borpadraw|medraw|draw)\s*/, ""); // replace the prompt prefix if it's still there
     confirmationMessage = await msg.reply(`Generating image(s)...`);
     if (confirmationMessage) {  // timeout to avoid trying to delete an empty message
         if (queueMessage.deletable) queueMessage.delete().catch(()=> null);
@@ -181,7 +183,7 @@ client.on(Events.MessageCreate, async msg => {
     }
 
     if (msg.content.includes("!borpachat") || msg.content.includes("!chat")){
-        let prompt = msg.content.replace(/^!borpachat /, "");
+        let prompt = msg.content.replace(/^!(borpachat|chat|cletus)\s*/, "");
         let completion = await openai.createCompletion({
             model: process.env.OPENAI_MODEL,
             prompt: prompt,
@@ -192,7 +194,7 @@ client.on(Events.MessageCreate, async msg => {
     }
 
     if (msg.content.includes("!borpaoptimize") || msg.content.includes("!optimize")) {
-        let prompt = msg.content.replace(/^!optimize /, "");
+        let prompt = msg.content.replace(/^!(borpaoptimize|optimize|borptimize)\s*/, "");
         let randomIndex = Math.floor(Math.random() * (optimizationStringArray.length - 1))
         prompt = optimizationStringArray[randomIndex] + prompt;
         let completion = await openai.createCompletion({
