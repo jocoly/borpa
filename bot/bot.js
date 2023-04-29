@@ -1,22 +1,21 @@
+//putting
+//comments
+//so
+//my
+//shit
+//wont
+//get
+//deleted
+
 import {} from 'dotenv/config';
 import {Client, Events, GatewayIntentBits} from 'discord.js';
 import {callDalleService} from "./backend_api.js";
 import {Configuration, OpenAIApi} from 'openai';
 import * as fs from "fs";
+import {optimizationStringArray} from "./optimizationStringArray.js";
 
 
 const TIMEOUT = 600000
-
-const optimizationStringArray = [
-    "Give me an optimized AI image prompt to help make better quality images based on the following subject. You should be detailed, describing the scene, the camera or art style, color styles, textures, etc. The subject is: ",
-    "Create a descriptive AI image prompt to show off the engine's ability to create beautiful art based on this subject. You should be extremely detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
-    "Create a descriptive AI image prompt to show off the engine's ability to create realistic art based on this subject. You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
-    "Take this prompt and modify it with details that will optimize for a better AI generated image You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
-    "Describe a picture you want commissioned based on this prompt. You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
-    "Describe a painting you want commissioned based on this prompt. You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
-    "Describe a piece of art you want create based on this prompt. You should be very detailed, describing the specifics of the setting, camera or art style, color styles, textures, etc. The subject is: ",
-    "Add more details to this prompt so that it can be used to generate a thought-provoking image: ",
-]
 
 let CONTAIN_BORPA = false;
 if (process.env.CONTAIN_BORPA === 'true') {
