@@ -1,8 +1,10 @@
 import {callDalleService} from "./backendAPI.js";
-import {queue, queueMessage, queueState} from "./bot.js";
+import {queue, queueState} from "./bot.js";
 import fs from "fs";
 
 const TIMEOUT = 600000
+
+export const messageQueue = {};
 
 export async function checkImageExists(imageFilePath) {
     try {
@@ -28,9 +30,9 @@ export async function processQueue(prompt, numImages) {
     prompt = msg.content.replace(/^!(borpadraw2|borpadraw|draw)\s*/, ""); // replace the prompt prefix if it's still there
     let confirmationMessage = await msg.reply(`Generating image(s)...`);
     if (confirmationMessage) {  // timeout to avoid trying to delete an empty message
-        if (queueMessage.deletable) queueMessage.delete().catch(() => null);
+        if (messageQueue[msg.author.id].deletable) messageQueue[msg.author.id].delete().catch(() => null);
         setTimeout(() => {
-            if (queueMessage.deletable) queueMessage.delete().catch(() => null);
+            if (messageQueue[msg.author.id].deletable) messageQueue[msg.author.id].delete().catch(() => null);
         }, 5000);
     }
     try {
