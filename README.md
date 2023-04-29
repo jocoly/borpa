@@ -51,7 +51,10 @@ Provide an OpenAI token for the text completion.
 
 ### 3. Copy the backend URL that outputs once the server is loaded.
 
-### 4. Create a new .env file in the /bot/ directory; add the following file and provide your tokens, backend URL and image directory path.
+### 4. Create a new .env file in the /backend/ directory and add the location you'd like to save generated images.
+  `OUTPUT_DIR=/fake/local/path/to/image/directory`
+
+### 5. Create a new .env file (yes, another one) in the /bot/ directory; add the following lines and provide your tokens, backend URL and image directory path.
 
 
   `TOKEN=SAMPLETOKENrY0cV8.i47CjAau-RHQPqXb1Mk2.nEhe4iUcrGOuegj57zMC`
@@ -73,11 +76,11 @@ Provide an OpenAI token for the text completion.
   `CHAT_TEMPERATURE=0.7`
 
 
-### 5. Open a new terminal window at the project directory and install dependencies.
+### 6. Open a new terminal window at the project directory and install dependencies.
 `cd bot && node install`
 
 
-### 6. Start the bot.
+### 7. Start the bot.
 `node bot.js`
 
 **The bot should now be online. Type !test to generate a test message.**
