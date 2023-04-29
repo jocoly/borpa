@@ -16,20 +16,20 @@ export async function checkImageExists(imageFilePath) {
 }
 
 export async function processQueue(prompt, numImages) {
-    if (queueState.processing) { // currently one at a time
+    if (queueState.processing) {
         return;
     }
     queueState.processing = true;
 
-    const msg = queue.requests.length > 0 ? queue.requests.shift() : undefined; // shift only if queue is not empty
+    const msg = queue.requests.length > 0 ? queue.requests.shift() : undefined;
     if (!msg) {
         queueState.processing = false;
         return;
     }
 
-    prompt = msg.content.replace(/^!(borpadraw2|borpadraw|draw)\s*/, ""); // replace the prompt prefix if it's still there
+    prompt = msg.content.replace(/^!(borpadraw2|borpadraw|draw)\s*/, "");
     let confirmationMessage = await msg.reply(`Generating image(s)...`);
-    if (confirmationMessage) {  // timeout to avoid trying to delete an empty message
+    if (confirmationMessage) {
         if (messageQueue[msg.author.id].deletable) messageQueue[msg.author.id].delete().catch(() => null);
         setTimeout(() => {
             if (messageQueue[msg.author.id].deletable) messageQueue[msg.author.id].delete().catch(() => null);
@@ -39,7 +39,7 @@ export async function processQueue(prompt, numImages) {
         const results = await Promise.race([
             callDalleService(process.env.BACKEND_URL, prompt, numImages),
             new Promise(resolve => setTimeout(() => resolve({timeout: true}), TIMEOUT))
-        ])
+        ]);
         if (results.timeout) {
             await msg.reply('Image generation timed out. Please try again later.');
         } else {
@@ -53,7 +53,7 @@ export async function processQueue(prompt, numImages) {
                     const message = await msg.channel.messages.fetch(msg.id).catch(() => null);
                     if (message) {
                         try {
-                            if (confirmationMessage) {  // timeout to avoid trying to delete an empty message
+                            if (confirmationMessage) {
                                 if (confirmationMessage.deletable) confirmationMessage.delete().catch(() => null);
                                 setTimeout(() => {
                                     if (confirmationMessage.deletable) confirmationMessage.delete().catch(() => null);
@@ -84,7 +84,9 @@ export async function processQueue(prompt, numImages) {
     }
     queue.position[msg.author.id] = undefined;
     queueState.processing = false;
-    await processQueue(prompt, numImages);
+    if (queue.requests.length > 0) {
+        await processQueue(prompt, numImages);
+    }
 }
 
 export async function clearQueue() {
