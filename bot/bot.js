@@ -1,12 +1,3 @@
-//putting
-//comments
-//so
-//my
-//shit
-//wont
-//get
-//deleted
-
 import {} from 'dotenv/config';
 import {Client, Events, GatewayIntentBits} from 'discord.js';
 import {callDalleService} from "./backend_api.js";
@@ -14,8 +5,9 @@ import {Configuration, OpenAIApi} from 'openai';
 import * as fs from "fs";
 import {optimizationStringArray} from "./optimizationStringArray.js";
 
-
 const TIMEOUT = 600000
+const configuration = new Configuration ({apiKey: process.env.OPENAI_TOKEN,});
+const openai = new OpenAIApi(configuration)
 
 let CONTAIN_BORPA = false;
 if (process.env.CONTAIN_BORPA === 'true') {
@@ -32,27 +24,23 @@ const client = new Client({intents: [
 const queue = {requests: [], position: {}};
 await clearQueue();
 
-let processing = false;
-
-const configuration = new Configuration ({
-    apiKey: process.env.OPENAI_TOKEN,
-});
-const openai = new OpenAIApi(configuration)
-
 let confirmationMessage;
 let queueMessage;
+let processing = false;
 
 async function processQueue(prompt, numImages) {
     if (processing) { // currently one at a time
         return;
     }
     processing = true;
+
     const msg = queue.requests.length > 0 ? queue.requests.shift() : undefined; // shift only if queue is not empty
     if (!msg) {
         processing = false;
         return;
     }
-    prompt = msg.content.replace(/^!(borpadraw2|borpadraw|medraw|draw)\s*/, ""); // replace the prompt prefix if it's still there
+
+    prompt = msg.content.replace(/^!(borpadraw2|borpadraw|draw)\s*/, ""); // replace the prompt prefix if it's still there
     confirmationMessage = await msg.reply(`Generating image(s)...`);
     if (confirmationMessage) {  // timeout to avoid trying to delete an empty message
         if (queueMessage.deletable) queueMessage.delete().catch(()=> null);
@@ -125,8 +113,12 @@ async function clearQueue() {
     queue.requests = [];
 }
 
-async function borpaDrawSomething() {
-    const PRIMARY_CHANNEL = await client.channels.fetch(process.env.DISCORD_CHANNEL_ID)
+async function borpaDrawSomething(channelID) {
+    if (!channelID) {
+        channelID = await client.channels.fetch(process.env.DISCORD_CHANNEL_ID)
+    } else {
+        channelID = await client.channels.fetch(channelID)
+    }
     const prompt = "Come up with a creative, descriptive prompt for an AI generated image for me. It can be anything.";
     let completion = await openai.createCompletion({ // create a prompt
         model: process.env.OPENAI_MODEL,
@@ -142,7 +134,7 @@ async function borpaDrawSomething() {
         max_tokens: 250,
         temperature: 0.8
     })
-    await PRIMARY_CHANNEL.send("!medraw" + optimizedCompletion.data.choices[0].text)
+    await channelID.send("!draw" + optimizedCompletion.data.choices[0].text)
 }
 
 client.once(Events.ClientReady, c => {
@@ -152,14 +144,7 @@ client.once(Events.ClientReady, c => {
 setInterval(borpaDrawSomething, 3600000) // generate borpa's own image every hour
 client.on(Events.MessageCreate, async msg => {
     if (CONTAIN_BORPA && msg.channel.id !== process.env.DISCORD_CHANNEL_ID) return;
-    if (msg.content.includes("!medraw") && msg.author.id === client.user.id) {
-        let prompt = msg.content;
-        queue.requests.push(msg);
-        queue.position[msg.author.id] = queue.requests.length;
-        queueMessage = await msg.reply(`Image prompt queued. There are ${queue.requests.length} requests ahead of you.`);
-        await processQueue(prompt, 1)
-    }
-    if (msg.author.id === client.user.id) return;
+    if (msg.author.id === client.user.id && !msg.content.includes("!draw")) return;
     if (msg.content === "!test") {
         return msg.channel.send("<:borpaLove:1100565172684328970>");
     }
@@ -171,7 +156,7 @@ client.on(Events.MessageCreate, async msg => {
         queueMessage = await msg.reply(`Image prompt queued. There are ${queue.requests.length} requests ahead of you.`);
         await processQueue(prompt, 2)
     } else if (msg.content.includes("!borpadrawsomething") || msg.content.includes("!drawsomething")) {
-        await borpaDrawSomething();
+        await borpaDrawSomething(msg.channelId);
     } else if (msg.content.includes("!borpadraw") || msg.content.includes("!draw")) {
         let prompt = msg.content
         queue.requests.push(msg);
