@@ -48,15 +48,3 @@ export async function callDalleService(backendUrl, text, numImages) {
 
     return results;
 }
-
-export async function checkIfValidBackend(backendUrl) {
-    return await fetch(backendUrl, {
-        headers: {
-            'Bypass-Tunnel-Reminder': "go"
-        }
-    }).then(function (response) {
-        return true
-    }).catch(() => {
-        return false
-    })
-}

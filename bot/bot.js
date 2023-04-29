@@ -42,7 +42,6 @@ const openai = new OpenAIApi(configuration)
 
 let confirmationMessage;
 let queueMessage;
-let readyToMeDraw=false;
 
 async function processQueue(prompt, numImages) {
     if (processing) { // currently one at a time
