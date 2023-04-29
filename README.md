@@ -2,7 +2,7 @@
 
 ## A hobby project by jocoly.
 
-I hooked up the Stable Diffusion backend server from [saharmor/dalle-playground](https://github.com/saharmor/dalle-playground) to a Discord bot interface.
+Stable Diffusion backend server from [saharmor/dalle-playground](https://github.com/saharmor/dalle-playground) hooked up to a Discord bot interface.
 
 The bot takes user prompts for Stable Diffusion image-generation and GPT text-completion and replies with the generated content.
 
@@ -14,18 +14,21 @@ Provide an OpenAI token for the text completion.
   `!test`
   -Sends a test response to show that the bot is working.
 
-  `!borpachat <PROMPT GOES HERE>`
+  `!chat <PROMPT GOES HERE>`
   -Sends a GPT text completion generated with the prompt that follows the command.
+
+  `!drawsomething <PROMPT GOES HERE>`
+  -The bot creates a prompt, optimizes it, and sends it with a '!draw' command.
   
-  `!borpadraw <PROMPT GOES HERE>`
+  `!draw <PROMPT GOES HERE>`
   -Sends a Stable Diffusion image generated with the prompt that follows the command.
   
-  `!borpadraw2 <PROMPT GOES HERE>`
+  `!draw2 <PROMPT GOES HERE>`
   -Sends two Stable Diffusion images generated with the prompt that follows the command.
-  (Takes twice as long as !borpadraw :wink:)
+  (Takes twice as long :wink:)
 
-  `!borpaoptimize <PROMPT GOES HERE>`
-  -Uses the GPT language model to generate a detailed prompt for the 
+  `!optimize <PROMPT GOES HERE>`
+  -Uses the GPT language model to generate a more optimized, descriptive image prompt.
 
 ## To run:
 
@@ -48,24 +51,34 @@ Provide an OpenAI token for the text completion.
 
 ### 3. Copy the backend URL that outputs once the server is loaded.
 
-### 4. Create a new .env file in the /bot/ directory; add the following the the file and provide your tokens, backend URL and image directory path.
+### 4. Create a new .env file in the /bot/ directory; add the following file and provide your tokens, backend URL and image directory path.
 
-  TOKEN=DISCORD APPLICATION TOKEN GOES HERE
 
-  BACKEND_URL=BACKEND URL GOES HERE
+  `TOKEN=SAMPLETOKENrY0cV8.i47CjAau-RHQPqXb1Mk2.nEhe4iUcrGOuegj57zMC`
+  
+  `BACKEND_URL=http://fake-url/`
 
-  OUTPUT_DIR=/PATH/TO/IMAGE/DIRECTORY/ // Generated images are saved locally.
+  `OUTPUT_DIR=/fake/local/path/to/image/directory`
 
-  OPENAI_TOKEN=OPENAI TOKEN GOES HERE // required for GPT completion but not needed for Stable Diffusion image generation
+  `OPENAI_TOKEN=sk-SAMPLETOKENJFoQkSNEhE5SA3EVji8AjnBpPlfdfj4hs8ljk`
 
-  OPENAI_MODEL="text-davinci-003" // the default OpenAI language model used if the user does not provide one
+  `OPENAI_MODEL=text-davinci-003`
 
-  CONTAIN_BORPA=true // true forces borpa to ignore messages from all but the provided channel
+  `CONTAIN_BORPA=true`
 
-  DISCORD_CHANNEL_ID=CHANNEL ID GOES HERE // if CONTAIN_BORPA=true then this is the only channel borpa will read
+  `DISCORD_CHANNEL_ID=CHANNEL ID GOES HERE`
 
-### 5. Open a new terminal window at the project directory and start the bot.**
-`cd bot && node bot.js`
+  `CHAT_PROMPT_MAX_TOKENS=250`
+
+  `CHAT_TEMPERATURE=0.7`
+
+
+### 5. Open a new terminal window at the project directory and install dependencies.
+`cd bot && node install`
+
+
+### 6. Start the bot.
+`node bot.js`
 
 **The bot should now be online. Type !test to generate a test message.**
   
