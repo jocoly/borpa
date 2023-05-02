@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
 const REQUEST_TIMEOUT_SEC = 120000
+import fetch from "node-fetch";
 
 export async function callDalleService(backendUrl, text, numImages) {
     const queryStartTime = new Date();
