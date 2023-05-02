@@ -42,26 +42,34 @@ Provide an OpenAI token for the text completion.
 | **PyTorch** | [PyTorch installation guide.](https://pytorch.org/get-started/locally/) |
 
 
-### 1. Open a terminal window at the project directory and download dependencies.
-`cd backend && pip install -r requirements.txt`
+### 1. Clone the repo and navigate to the backend folder. Here, create a file called '.env' and store a path to a local directory.
+**This will be where generated images are saved locally.**
 
+`OUTPUT_DIR=/PATH/TO/LOCAL/DIR/`
 
-### 2. Start the backend server:
-`python3 app.py --port 8080 // or your preferred port`
+### 2. Open a terminal window at the project directory and build the backend Docker image.
+`cd backend && sudo docker build . -t backend-image`
 
-### 3. Copy the backend URL that outputs once the server is loaded.
+### 3. Start the backend server using NVIDIA runtime.
+**CUDA-enabled GPU required; omit the --runtime arg to use CPU only**
 
-### 4. Create a new .env file in the /backend/ directory and add the location you'd like to save generated images.
-  `OUTPUT_DIR=/fake/local/path/to/image/directory`
+*Be sure to mount the same directory you stored in the '.env' file.*
+
+`sudo docker run --runtime=nvidia -v /PATH/TO/LOCAL/DIR backend-image`
+
+### 4. Copy the backend URL that outputs once the server is loaded.
+`http://127.0.0.0.1:3000` or something similar.
 
 ### 5. Create a new .env file (yes, another one) in the /bot/ directory; add the following lines and provide your tokens, backend URL and image directory path.
+**If CONTAIN_BORPA=true, the bot will only see messages in the channel with the ID provided in DISCORD_CHANNEL_ID**
 
+*You should still provide a DISCORD_CHANNEL_ID even if you do not want the bot contained. This is the channel used for the bot's self-generated images.*
 
   `TOKEN=SAMPLETOKENrY0cV8.i47CjAau-RHQPqXb1Mk2.nEhe4iUcrGOuegj57zMC`
   
-  `BACKEND_URL=http://fake-url/`
+  `BACKEND_URL=http://127.0.0.1:3000/`
 
-  `OUTPUT_DIR=/fake/local/path/to/image/directory`
+  `OUTPUT_DIR=/PATH/TO/LOCAL/DIR/`
 
   `OPENAI_TOKEN=sk-SAMPLETOKENJFoQkSNEhE5SA3EVji8AjnBpPlfdfj4hs8ljk`
 
@@ -69,19 +77,21 @@ Provide an OpenAI token for the text completion.
 
   `CONTAIN_BORPA=true`
 
-  `DISCORD_CHANNEL_ID=CHANNEL ID GOES HERE`
+  `DISCORD_CHANNEL_ID=012345678910111213`
 
   `CHAT_PROMPT_MAX_TOKENS=250`
 
   `CHAT_TEMPERATURE=0.7`
 
 
-### 6. Open a new terminal window at the project directory and install dependencies.
-`cd bot && node install`
+### 6. Open a new terminal window at the project directory and build the Discord bot image.
+`cd bot && sudo docker build . -t bot-image`
 
 
 ### 7. Start the bot.
-`node bot.js`
+`sudo docker run -v /PATH/TO/LOCAL/DIR bot-image`
 
-**The bot should now be online. Type !test to generate a test message.**
+**Don't forget to mount the same local directory that is shared by the backend.**
+
+### The bot should now be online. Type !test to generate a test message.
   
