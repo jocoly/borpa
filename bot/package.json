@@ -8,8 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "jocoly",
+  "license": "MIT",
   "dependencies": {
     "discord-api-types": "^0.37.40",
     "discord.js": "^14.9.0",
