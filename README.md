@@ -32,30 +32,31 @@ Provide an OpenAI token for the text completion.
 
 ## To run:
 
-| Requirements | Description |
-| ----------- | ----------- |
-| **An Nvidia CUDA-enabled GPU (not required but dramatically speeds up image processing)** | [Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus) |
-| **A valid Discord application token** | [Reactiflux guide on creating a new Discord bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)<br />Be sure that the bot is added to the intended server and has the 'GuildMessages' intent enabled. |
-| **A valid OpenAI API token (required for GPT completion but not needed for Stable Diffusion image generation)** | [OpenAI API Key Manager](https://platform.openai.com/account/api-keys) |
-| **Python3 and pip package installer** | **Linux:**<br />`sudo apt upgrade`<br />`sudo apt install python3`<br />`sudo apt install pip`<br />**MacOS:**<br />`brew install python3`<br />`brew install pip`<br />**Windows:**<br />-[Download from python.org and run the installer](https://www.python.org/downloads/)<br />`python get-pip.py` |
-| **NodeJS** | **Linux:**<br />`sudo apt upgrade`<br />`sudo apt install node.js`<br />**MacOS:**<br />`brew install node.js`<br />**Windows:**<br />-[Download from nodejs.org and run the installer](https://nodejs.org/en/download) |
-| **PyTorch** | [PyTorch installation guide.](https://pytorch.org/get-started/locally/) |
+| Requirements                                                                                                    | Description                                                                                                                                                                                                                                     |
+|-----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **An Nvidia CUDA-enabled GPU (not required but dramatically speeds up image processing)**                       | [Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus)                                                                                                                                                                        |
+| **A valid Discord application token**                                                                           | [Reactiflux guide on creating a new Discord bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)<br />Be sure that the bot is added to the intended server and has the 'GuildMessages' intent enabled. |
+| **A valid OpenAI API token (required for GPT completion but not needed for Stable Diffusion image generation)** | [OpenAI API Key Manager](https://platform.openai.com/account/api-keys)                                                                                                                                                                          |
+| **Docker**                                                                                                      | [Download and install from Docker.com](https://docs.docker.com/engine/install/)                                                                                                                                                                 |
 
 
 ### 1. Clone the repo and navigate to the backend folder. Here, create a file called '.env' and store a path to a local directory.
-**This will be where generated images are saved locally.**
+**This will be the location inside the container where generated images are saved.**
 
-`OUTPUT_DIR=/PATH/TO/LOCAL/DIR/`
+`OUTPUT_DIR=/app/generated-images/`
 
 ### 2. Open a terminal window at the project directory and build the backend Docker image.
 `cd backend && sudo docker build . -t backend-image`
 
+### 3. Create a Docker volume with the same directory name you chose in step 1
+`sudo docker volume create generated-images`
+
 ### 3. Start the backend server using NVIDIA runtime.
 **CUDA-enabled GPU required; omit the --runtime arg to use CPU only**
 
-*Be sure to mount the same directory you stored in the '.env' file.*
+*Be sure to mount the Docker volume you just created.*
 
-`sudo docker run --runtime=nvidia -v /PATH/TO/LOCAL/DIR backend-image`
+`sudo docker run --runtime=nvidia --mount source=generated-images,target=/app backend-image`
 
 ### 4. Copy the backend URL that outputs once the server is loaded.
 `http://127.0.0.0.1:3000` or something similar.
@@ -69,7 +70,7 @@ Provide an OpenAI token for the text completion.
   
   `BACKEND_URL=http://127.0.0.1:3000/`
 
-  `OUTPUT_DIR=/PATH/TO/LOCAL/DIR/`
+  `OUTPUT_DIR=/app/generated-images/`
 
   `OPENAI_TOKEN=sk-SAMPLETOKENJFoQkSNEhE5SA3EVji8AjnBpPlfdfj4hs8ljk`
 
@@ -89,7 +90,9 @@ Provide an OpenAI token for the text completion.
 
 
 ### 7. Start the bot.
-`sudo docker run -v /PATH/TO/LOCAL/DIR bot-image`
+*Again, don't forget to mount your volume*
+
+`sudo docker run -mount /app/generated-images/ bot-image`
 
 **Don't forget to mount the same local directory that is shared by the backend.**
 
