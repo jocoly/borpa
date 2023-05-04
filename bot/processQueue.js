@@ -1,7 +1,6 @@
 import {callDalleService} from "./backendAPI.js";
 import {queue, queueState} from "./bot.js";
 import fs from "fs";
-import fetch from "node-fetch";
 
 const TIMEOUT = 600000
 
@@ -27,8 +26,8 @@ export async function processQueue(prompt, numImages) {
         queueState.processing = false;
         return;
     }
-
-    prompt = msg.content.replace(/^!(borpadraw2|borpadraw|draw)\s*/, "");
+    const resultsArray =[];
+    prompt = msg.content.split(" ").slice(1).join(' ');
     let confirmationMessage = await msg.reply(`Generating image(s)...`);
     if (confirmationMessage) {
         if (messageQueue[msg.author.id].deletable) messageQueue[msg.author.id].delete().catch(() => null);
@@ -60,7 +59,7 @@ export async function processQueue(prompt, numImages) {
                                     if (confirmationMessage.deletable) confirmationMessage.delete().catch(() => null);
                                 }, 5000);
                             }
-                            await message.reply({files: [result.imageFilePath]});
+                            resultsArray.push(result.imageFilePath)
                         } catch (error) {
                             console.error('Error sending image:', error);
                         }
@@ -71,6 +70,8 @@ export async function processQueue(prompt, numImages) {
                     console.error('Error sending image:', error)
                 }
             }
+            const message = await msg.channel.messages.fetch(msg.id).catch(() => null);
+            await message.reply({files:resultsArray});
         }
         if (queue.requests.length === 0) {
             queueState.processing = false;
