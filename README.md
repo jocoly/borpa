@@ -23,9 +23,8 @@ Provide an OpenAI token for the text completion.
   `!draw <PROMPT GOES HERE>`
   -Sends a Stable Diffusion image generated with the prompt that follows the command.
   
-  `!draw2 <PROMPT GOES HERE>`
-  -Sends two Stable Diffusion images generated with the prompt that follows the command.
-  (Takes twice as long :wink:)
+  `!drawX <PROMPT GOES HERE>`
+  -Sends a user-specified number of Stable Diffusion images generated with the prompt that follows the command. (Replace X with an integer).
 
   `!optimize <PROMPT GOES HERE>`
   -Uses the GPT language model to generate a more optimized, descriptive image prompt.
@@ -43,23 +42,23 @@ Provide an OpenAI token for the text completion.
 ### 1. Clone the repo and navigate to the backend folder. Here, create a file called '.env' and store a path to a local directory.
 **This will be the location inside the container where generated images are saved.**
 
-`OUTPUT_DIR=/app/generated-images/`
+`OUTPUT_DIR=/app/images/`
 
 ### 2. Open a terminal window at the project directory and build the backend Docker image.
 `cd backend && sudo docker build . -t backend-image`
 
 ### 3. Create a Docker volume with the same directory name you chose in step 1
-`sudo docker volume create generated-images`
+`sudo docker volume create images`
 
 ### 3. Start the backend server using NVIDIA runtime.
 **CUDA-enabled GPU required; omit the --runtime arg to use CPU only**
 
 *Be sure to mount the Docker volume you just created.*
 
-`sudo docker run --runtime=nvidia --mount source=generated-images,target=/app backend-image`
+`sudo docker run --runtime=nvidia --mount source=images,target=/app backend-image`
 
 ### 4. Copy the backend URL that outputs once the server is loaded.
-`http://127.0.0.0.1:3000` or something similar.
+`http://174.134.134.45` or something similar.
 
 ### 5. Create a new .env file (yes, another one) in the /bot/ directory; add the following lines and provide your tokens, backend URL and image directory path.
 **If CONTAIN_BORPA=true, the bot will only see messages in the channel with the ID provided in DISCORD_CHANNEL_ID**
@@ -83,6 +82,12 @@ Provide an OpenAI token for the text completion.
   `CHAT_PROMPT_MAX_TOKENS=250`
 
   `CHAT_TEMPERATURE=0.7`
+  
+  `MAX_NUM_IMGS=4`
+  
+  `SELF_DRAW=true`
+  
+  `SELF_DRAW_INTERVAL_MILLISECONDS=3600000`
 
 
 ### 6. Open a new terminal window at the project directory and build the Discord bot image.
@@ -92,9 +97,7 @@ Provide an OpenAI token for the text completion.
 ### 7. Start the bot.
 *Again, don't forget to mount your volume*
 
-`sudo docker run -mount /app/generated-images/ bot-image`
-
-**Don't forget to mount the same local directory that is shared by the backend.**
+`sudo docker run --mount source=images,target=/app bot-image`
 
 ### The bot should now be online. Type !test to generate a test message.
   
