@@ -24,7 +24,7 @@ Provide an OpenAI token for the text completion.
   -Sends a Stable Diffusion image generated with the prompt that follows the command.
   
   `!drawX <PROMPT GOES HERE>`
-  -Sends a user-specified number of Stable Diffusion images generated with the prompt that follows the command. (Replace X with an integer).
+  -Sends a user-specified number of Stable Diffusion images generated with the prompt that follows the command. (Replace X with an integer)
 
   `!optimize <PROMPT GOES HERE>`
   -Uses the GPT language model to generate a more optimized, descriptive image prompt.
@@ -50,17 +50,17 @@ Provide an OpenAI token for the text completion.
 ### 3. Create a Docker volume with the same directory name you chose in step 1
 `sudo docker volume create images`
 
-### 3. Start the backend server using NVIDIA runtime.
+### 4. Start the backend server using NVIDIA runtime.
 **CUDA-enabled GPU required; omit the --runtime arg to use CPU only**
 
 *Be sure to mount the Docker volume you just created.*
 
 `sudo docker run --runtime=nvidia --mount source=images,target=/app backend-image`
 
-### 4. Copy the backend URL that outputs once the server is loaded.
+### 5. Copy the backend URL that outputs once the server is loaded.
 `http://174.134.134.45` or something similar.
 
-### 5. Create a new .env file (yes, another one) in the /bot/ directory; add the following lines and provide your tokens, backend URL and image directory path.
+### 6. Create a new .env file (yes, another one) in the /bot/ directory; add the following lines and provide your tokens, backend URL and image directory path.
 **If CONTAIN_BORPA=true, the bot will only see messages in the channel with the ID provided in DISCORD_CHANNEL_ID**
 
 *You should still provide a DISCORD_CHANNEL_ID even if you do not want the bot contained. This is the channel used for the bot's self-generated images.*
@@ -90,11 +90,11 @@ Provide an OpenAI token for the text completion.
   `SELF_DRAW_INTERVAL_MILLISECONDS=3600000`
 
 
-### 6. Open a new terminal window at the project directory and build the Discord bot image.
+### 7. Open a new terminal window at the project directory and build the Discord bot image.
 `cd bot && sudo docker build . -t bot-image`
 
 
-### 7. Start the bot.
+### 8. Start the bot.
 *Again, don't forget to mount your volume*
 
 `sudo docker run --mount source=images,target=/app bot-image`
