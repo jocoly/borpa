@@ -1,5 +1,5 @@
 import {optimizationStringArray} from "./optimizationStringArray.js";
-import {client, openai} from "./bot.js";
+import {client, openai} from "../bot.js";
 
 export async function drawSomething(msg) {
     let channelID = ""

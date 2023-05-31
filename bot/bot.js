@@ -1,18 +1,21 @@
 import {} from 'dotenv/config';
 import {Client, Events, GatewayIntentBits} from 'discord.js';
 import {Configuration, OpenAIApi} from 'openai';
-import {clearQueue} from "./processQueue.js";
-import {drawSomething} from "./drawSomething.js";
-import {commands, prefixes} from "./commands.js";
-import {optimize} from "./optimize.js";
-import {chat} from "./chat.js";
-import {draw} from "./draw.js";
-import {drawX} from "./drawX.js";
+import {clearQueue} from "./tools/processQueue.js";
+import {drawSomething} from "./commands/drawSomething.js";
+import {commands, prefixes} from "./commands/commands.js";
+import {optimize} from "./commands/optimize.js";
+import {chat} from "./commands/chat.js";
+import {draw} from "./commands/draw.js";
+import {drawX} from "./commands/drawX.js";
+import {txt2vid} from "./commands/txt2vid.js";
 
 export const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent,],});
 export const queue = {requests: [], position: {}};
+export const videoQueue = {requests: [], position: {}};
 await clearQueue();
 export const queueState = {processing: false,};
+export const videoQueueState = {processing: false,};
 export let queueMessage;
 const configuration = new Configuration ({apiKey: process.env.OPENAI_TOKEN,});
 export const openai = new OpenAIApi(configuration);
@@ -64,6 +67,10 @@ client.on(Events.MessageCreate, async msg => {
 
     if (msg.content.includes(prefixes.std + commands.optimize) || msg.content.includes(prefixes.borpa + commands.optimize) || msg.content.includes("!borptimize")) {
         await optimize(msg);
+    }
+
+    if (msg.content.includes(prefixes.std + commands.video) || msg.content.includes(prefixes.std + commands.vid) || msg.content.includes(prefixes.std + commands.txt2vid)) {
+        await txt2vid(msg);
     }
 
 });

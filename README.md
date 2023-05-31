@@ -8,6 +8,8 @@ The bot takes user prompts for Stable Diffusion image-generation and GPT text-co
 
 Currently running with SD 2.0 in the backend, and using the text-davinci-003 language model.
 
+Video is generated using the Modelscope text2vid plugin for SD. I borrowed the backend setup from [deforum-art/sd-webui-text2video](https://github.com/deforum-art/sd-webui-text2video)
+
 Provide an OpenAI token for the text completion.
 
 ## Supported Commands:
@@ -29,6 +31,9 @@ Provide an OpenAI token for the text completion.
   `!optimize <PROMPT GOES HERE>`
   -Uses the GPT language model to generate a more optimized, descriptive image prompt.
 
+  `!vid <PROMPT GOES HERE>`
+  -Sends a Modelscope text2vid video generated with the prompt that follows the command.
+
 ## To run:
 
 | Requirements                                                                                                    | Description                                                                                                                                                                                                                                     |
@@ -39,28 +44,23 @@ Provide an OpenAI token for the text completion.
 | **Docker**                                                                                                      | [Download and install from Docker.com](https://docs.docker.com/engine/install/)                                                                                                                                                                 |
 
 
-### 1. Clone the repo and navigate to the backend folder. Here, create a file called '.env' and store a path to a local directory.
-**This will be the location inside the container where generated images are saved.**
+### 1. Open a terminal window at the project directory and build the backend Docker image.
+`cd backend && docker build . -t backend-image`
 
-`OUTPUT_DIR=/app/images/`
+### 2. Create a Docker volume named 'images' (this is where images will be saved)
+`docker volume create images`
 
-### 2. Open a terminal window at the project directory and build the backend Docker image.
-`cd backend && sudo docker build . -t backend-image`
-
-### 3. Create a Docker volume with the same directory name you chose in step 1
-`sudo docker volume create images`
-
-### 4. Start the backend server using NVIDIA runtime.
+### 3. Start the backend server using NVIDIA runtime.
 **CUDA-enabled GPU required; omit the --runtime arg to use CPU only**
 
 *Be sure to mount the Docker volume you just created.*
 
-`sudo docker run --runtime=nvidia --mount source=images,target=/app backend-image`
+`docker run --runtime=nvidia --mount source=images,target=/app backend-image`
 
-### 5. Copy the backend URL that outputs once the server is loaded.
+### 4. Copy the backend URL that outputs once the server is loaded.
 `http://174.134.134.45` or something similar.
 
-### 6. Create a new .env file (yes, another one) in the /bot/ directory; add the following lines and provide your tokens, backend URL and image directory path.
+### 5. Create a new .env file in the /bot/ directory; add the following lines and provide your tokens, backend URL and image directory path.
 **If CONTAIN_BORPA=true, the bot will only see messages in the channel with the ID provided in DISCORD_CHANNEL_ID**
 
 *You should still provide a DISCORD_CHANNEL_ID even if you do not want the bot contained. This is the channel used for the bot's self-generated images.*
@@ -90,14 +90,14 @@ Provide an OpenAI token for the text completion.
   `SELF_DRAW_INTERVAL_MILLISECONDS=3600000`
 
 
-### 7. Open a new terminal window at the project directory and build the Discord bot image.
-`cd bot && sudo docker build . -t bot-image`
+### 6. Open a new terminal window at the project directory and build the Discord bot image.
+`cd bot && docker build . -t bot-image`
 
 
-### 8. Start the bot.
+### 7. Start the bot.
 *Again, don't forget to mount your volume*
 
-`sudo docker run --mount source=images,target=/app bot-image`
+`docker run --mount source=images,target=/app bot-image`
 
 ### The bot should now be online. Type !test to generate a test message.
   

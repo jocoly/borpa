@@ -1,5 +1,5 @@
 import {callDalleService} from "./backendAPI.js";
-import {queue, queueState} from "./bot.js";
+import {queue, queueState} from "../bot.js";
 import fs from "fs";
 
 const TIMEOUT = 600000

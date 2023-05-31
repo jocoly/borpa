@@ -4,6 +4,9 @@ export const commands = {
     drawSomething: "drawsomething",
     optimize: "optimize",
     chat: "chat",
+    txt2vid: "txt2vid",
+    vid: "vid",
+    video: "video"
 }
 
 export const prefixes = {

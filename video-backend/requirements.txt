@@ -1,0 +1,21 @@
+opencv-python
+gradio
+flask
+pathlib
+pytorch-lightning
+open_clip_torch
+addict
+attrs
+einops
+filelock
+jsonplus
+oss2
+pillow
+pyyaml
+scipy
+setuptools
+tqdm
+yapf
+requests
+gast
+--extra-index-url https://pypi.ngc.nvidia.com

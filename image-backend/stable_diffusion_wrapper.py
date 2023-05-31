@@ -1,10 +1,8 @@
 from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler
 import torch
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
-inference_steps = os.getenv("INFERENCE_STEPS")
+inference_steps = 70
+
 
 class StableDiffusionWrapper:
     def __init__(self) -> None:
@@ -18,7 +16,6 @@ class StableDiffusionWrapper:
             pipe.scheduler.config)
         self.pipe = pipe.to("cuda")
 
-            
     def generate_images(self, text_prompt: str, num_images: int):
         prompt = [text_prompt] * num_images
         images = self.pipe(prompt, num_inference_steps=inference_steps).images

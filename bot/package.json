@@ -13,7 +13,9 @@
   "dependencies": {
     "discord-api-types": "^0.37.40",
     "discord.js": "^14.9.0",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.1.0",
+    "ffmpeg": "^0.0.4",
+    "form-data": "^4.0.0",
     "node-fetch": "^3.3.1",
     "openai": "^3.2.1"
   }

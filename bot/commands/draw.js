@@ -1,5 +1,5 @@
-import {messageQueue, processQueue} from "./processQueue.js";
-import {queue} from "./bot.js";
+import {messageQueue, processQueue} from "../tools/processQueue.js";
+import {queue} from "../bot.js";
 
 export async function draw(msg) {
     let prompt = msg.content

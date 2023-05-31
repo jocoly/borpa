@@ -1,4 +1,4 @@
-import {openai} from "./bot.js";
+import {openai} from "../bot.js";
 
 export async function chat(msg) {
     let prompt = msg.content.replace(/^!(borpachat|chat)\s*/, "");
