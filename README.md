@@ -12,8 +12,6 @@ Everything here is locally-hosted EXCEPT text-based functions. (GPT text models 
 
 I made this because other options were not what I wanted or were prohibitively expensive with regard to API access/tokens.
 
-Everything 
-
 ### Built on:
 
 -[Stable Diffusion 2](https://github.com/Stability-AI/stablediffusion) 2.0 for image generation
