@@ -1,6 +1,6 @@
 # borpa
 
-## Beta Release: Text-to-Video
+## Beta Release: Modelscope Text-to-Video
 
 Type !video \<prompt\> for a 2-second video.
 
