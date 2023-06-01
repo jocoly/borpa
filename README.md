@@ -4,6 +4,8 @@
 
 Type !video \<prompt\> for a 2-second video.
 
+https://github.com/jocoly/borpa/assets/62028785/30894c88-3fad-4413-b6ab-09b228b4729a
+
 ## A hobby project by jocoly.
 
 A Discord bot that facilitates an AI sandbox in your server.
