@@ -1,9 +1,9 @@
-
 import base64
 import os
 import time
 from pathlib import Path
 from io import BytesIO
+import torch
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from stable_diffusion_wrapper import StableDiffusionWrapper
@@ -12,9 +12,10 @@ app = Flask(__name__)
 CORS(app)
 print("--> Starting the image generation server. This might take up to two minutes.")
 
-stable_diff_model = None
+backend_address = "127.0.0.1"
+port = 8000
 
-ip_address = os.getenv("BACKEND_URL")
+device = torch.device('cuda:0')
 
 
 @app.route("/generate", methods=["POST"])
@@ -29,7 +30,7 @@ def generate_images_api():
     gen_time = time.time() - start_time
 
     returned_generated_images = []
-    output_dir = '/app/images/'
+    output_dir = './output/images/'
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
     for idx, img in enumerate(generated_imgs):
@@ -39,10 +40,10 @@ def generate_images_api():
         img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
         returned_generated_images.append(img_str)
 
-    print(f"Created {num_images} images from text prompt [{text_prompt}]")
+    print(f"Created {num_images} images in {gen_time} ms from text prompt [{text_prompt}]")
 
     response = {'generatedImgs': returned_generated_images,
-                'generatedImgsFormat': args.img_format}
+                'generatedImgsFormat': 'png'}
     return jsonify(response)
 
 
@@ -57,4 +58,4 @@ with app.app_context():
     print("--> Image generation server is up and running!")
 
 if __name__ == "__main__":
-    app.run(host=ip_address, port=8000, debug=False)
+    app.run(host=backend_address, port=port, debug=False)

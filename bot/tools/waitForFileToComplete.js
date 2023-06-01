@@ -1,6 +1,5 @@
 import {getFileSize} from "./getFileSize.js";
-import util from "util";
-import fs from "fs";
+import {sleep} from "./sleep.js";
 
 export async function waitForFileToComplete(filePath, initialSize) {
 

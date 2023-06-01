@@ -1,18 +1,29 @@
 # borpa
 
+## 2.0 Beta Release: Text-to-Video
+
+Type !video \<prompt\> for a 2-second video.
+
 ## A hobby project by jocoly.
 
-Stable Diffusion backend server from [saharmor/dalle-playground](https://github.com/saharmor/dalle-playground) hooked up to a Discord bot interface.
+A Discord bot that facilitates an AI sandbox in your server.
 
-The bot takes user prompts for Stable Diffusion image-generation and GPT text-completion and replies with the generated content.
+Everything here is locally-hosted EXCEPT text-based functions. (GPT text models are relatively cheap and far-better than locally-hosted LLM solutions presently.)
 
-Currently running with SD 2.0 in the backend, and using the text-davinci-003 language model.
+I made this because other options were not what I wanted or were prohibitively expensive with regard to API access/tokens.
 
-Video is generated using the Modelscope text2vid plugin for SD. I borrowed the backend setup from [deforum-art/sd-webui-text2video](https://github.com/deforum-art/sd-webui-text2video)
+Everything 
 
-Provide an OpenAI token for the text completion.
+### Built on:
+
+-[Stable Diffusion 2](https://github.com/Stability-AI/stablediffusion) 2.0 for image generation
+
+-[Modelscope text-to-video](https://huggingface.co/spaces/damo-vilab/modelscope-text-to-video-synthesis) for video generation
+
+-[OpenAI](https://platform.openai.com/account/api-keys) (gpt/text-davinci-003) for text completion.
 
 ## Supported Commands:
+
   `!test`
   -Sends a test response to show that the bot is working.
 
@@ -31,73 +42,91 @@ Provide an OpenAI token for the text completion.
   `!optimize <PROMPT GOES HERE>`
   -Uses the GPT language model to generate a more optimized, descriptive image prompt.
 
-  `!vid <PROMPT GOES HERE>`
-  -Sends a Modelscope text2vid video generated with the prompt that follows the command.
+  `!video <PROMPT GOES HERE>`
+  -Sends a Modelscope text-to-vid video generated with the prompt that follows the command.
 
 ## To run:
 
-| Requirements                                                                                                    | Description                                                                                                                                                                                                                                     |
-|-----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **An Nvidia CUDA-enabled GPU (not required but dramatically speeds up image processing)**                       | [Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus)                                                                                                                                                                        |
-| **A valid Discord application token**                                                                           | [Reactiflux guide on creating a new Discord bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)<br />Be sure that the bot is added to the intended server and has the 'GuildMessages' intent enabled. |
-| **A valid OpenAI API token (required for GPT completion but not needed for Stable Diffusion image generation)** | [OpenAI API Key Manager](https://platform.openai.com/account/api-keys)                                                                                                                                                                          |
-| **Docker**                                                                                                      | [Download and install from Docker.com](https://docs.docker.com/engine/install/)                                                                                                                                                                 |
+| Requirements                                                                                                                    | Description                                                                                                                                                                                                                                     |
+|---------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **An Nvidia CUDA-enabled GPU (not required for images but dramatically speeds up image processing; mandatory for text-to-vid)** | [Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus)                                                                                                                                                                        |
+| **12GB of VRAM if you want to use text-to-video**                                                                               | TODO: Low-VRAM or CPU options                                                                                                                                                                                                                   |
+| **A valid Discord application token**                                                                                           | [Reactiflux guide on creating a new Discord bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)<br />Be sure that the bot is added to the intended server and has the 'GuildMessages' intent enabled. |
+| **A valid OpenAI API token (required for GPT completion but not needed for Stable Diffusion image generation)**                 | [OpenAI API Key Manager](https://platform.openai.com/account/api-keys)                                                                                                                                                                          |                                                                                                                                                         |
 
 
-### 1. Open a terminal window at the project directory and build the backend Docker image.
-`cd backend && docker build . -t backend-image`
+### 1. Install Python (3.7 or newer)
 
-### 2. Create a Docker volume named 'images' (this is where images will be saved)
-`docker volume create images`
+[python.org](https://www.python.org/downloads/)
 
-### 3. Start the backend server using NVIDIA runtime.
-**CUDA-enabled GPU required; omit the --runtime arg to use CPU only**
+### 2. Install NodeJS 18
 
-*Be sure to mount the Docker volume you just created.*
+[nodejs.org](https://nodejs.org/en/download)
 
-`docker run --runtime=nvidia --mount source=images,target=/app backend-image`
+### 3. Create a new file called '.env' in the ./bot/ folder and copy the following into it.
 
-### 4. Copy the backend URL that outputs once the server is loaded.
-`http://174.134.134.45` or something similar.
+Add your Discord and OpenAI tokens.
 
-### 5. Create a new .env file in the /bot/ directory; add the following lines and provide your tokens, backend URL and image directory path.
-**If CONTAIN_BORPA=true, the bot will only see messages in the channel with the ID provided in DISCORD_CHANNEL_ID**
+Tweak the other settings to suit your needs at your own risk.
 
-*You should still provide a DISCORD_CHANNEL_ID even if you do not want the bot contained. This is the channel used for the bot's self-generated images.*
+`TOKEN=<Discord Token goes here>`
 
-  `TOKEN=SAMPLETOKENrY0cV8.i47CjAau-RHQPqXb1Mk2.nEhe4iUcrGOuegj57zMC`
-  
-  `BACKEND_URL=http://127.0.0.1:3000/`
+`CONTAIN_BORPA=true`
 
-  `OUTPUT_DIR=/app/generated-images/`
+`DISCORD_CHANNEL_ID=<Channel ID of the channel to which the bot should be confined>`
 
-  `OPENAI_TOKEN=sk-SAMPLETOKENJFoQkSNEhE5SA3EVji8AjnBpPlfdfj4hs8ljk`
+`IMAGE_BACKEND_URL=http://127.0.0.1:8000`
 
-  `OPENAI_MODEL=text-davinci-003`
+`VIDEO_BACKEND_URL=http://127.0.0.1:8001`
 
-  `CONTAIN_BORPA=true`
+`OPENAI_TOKEN=sk-SAMPLETOKENkalspdj2klja4kdfj2l2a2u6iugoiu`
 
-  `DISCORD_CHANNEL_ID=012345678910111213`
+`OPENAI_MODEL=text-davinci-003`
 
-  `CHAT_PROMPT_MAX_TOKENS=250`
+`CHAT_PROMPT_MAX_TOKENS=250`
 
-  `CHAT_TEMPERATURE=0.7`
-  
-  `MAX_NUM_IMGS=4`
-  
-  `SELF_DRAW=true`
-  
-  `SELF_DRAW_INTERVAL_MILLISECONDS=3600000`
+`CHAT_TEMPERATURE=0.7`
 
+`MAX_NUM_IMGS=4`
 
-### 6. Open a new terminal window at the project directory and build the Discord bot image.
-`cd bot && docker build . -t bot-image`
+`SELF_DRAW=true`
 
+`SELF_DRAW_INTERVAL_MILLISECONDS=3600000`
 
-### 7. Start the bot.
-*Again, don't forget to mount your volume*
+### 4. Install the video models if you want to use text-to-vid
 
-`docker run --mount source=images,target=/app bot-image`
+`./video-backend/install.sh`
+
+Sometimes the model download crashes on Modelscope's end; just try again if it does.
+
+### 5. Start the video server (This takes a while if models aren't downloaded.)
+
+**CUDA-enabled GPU required. Probably at least 12GB of VRAM too if you don't want it to crash frequently**
+
+`cd video-backend && python3 modelscope_app.py`
+
+### 6. In a new terminal window, start the image server.
+`cd ./image-backend && python3 sd_app.py`
+
+### 7. In another new terminal window, start the bot.
+`cd ./bot && node bot.js`
 
 ### The bot should now be online. Type !test to generate a test message.
   
+### FAQ
+
+- Images save to ./image-backend/output/images/
+
+- Videos save as gifs (so Discord properly displays them on mobile) to ./video-backend/output/videos/
+
+- `CONTAIN_BORPA` will make the bot ignore messages that aren't in the channel matching the provided channel id.
+
+- `SELF_DRAW` will make the bot generate its own image in the provided channel on the interval provided below. If you don't provide a channel ID, set this to false.
+
+- `SELF_DRAW_INTERVAL_MILLISECONDS` is the interval at which the bot will draw its own pictures if `SELF_DRAW` is true. Default = 1 hour.
+
+### TODO:
+
+- Low-vram video function
+
+- Self-draw for video

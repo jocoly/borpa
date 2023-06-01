@@ -1,4 +1,3 @@
-import argparse
 import os
 import random
 import time
@@ -6,7 +5,6 @@ import torch
 import uuid
 import subprocess
 from pathlib import Path
-
 from flask import request, jsonify, Flask
 from flask_cors import CORS, cross_origin
 from modelscope import pipeline
@@ -14,9 +12,10 @@ from modelscope.outputs import OutputKeys
 
 app = Flask(__name__)
 CORS(app)
-print("--> Starting the video generation server. This might take up to two minutes.")
+print("--> Starting the video generation server. This might take up to two minutes. (or longer if the models aren't "
+      "downloaded yet)")
 
-ip_address = "127.0.0.1"
+backend_address = "127.0.0.1"
 port = 8001
 
 # Load model
@@ -34,7 +33,7 @@ def generate(prompt: str, seed: int):
     video_output = pipe({'text': prompt})[OutputKeys.OUTPUT_VIDEO]
     gen_time = time.time() - start_time
 
-    output_dir = '/app/videos/'
+    output_dir = './output/videos'
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
     # Save
@@ -85,4 +84,4 @@ with app.app_context():
     print("--> Video generation server is up and running!")
 
 if __name__ == "__main__":
-    app.run(host=ip_address, port=port, debug=False)
+    app.run(host=backend_address, port=port, debug=False)

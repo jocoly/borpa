@@ -1,8 +1,7 @@
-cd video-backend && docker build --no-cache . -t video-backend-image
+cd video-backend && pip install -r requirements.txt
+python3 modelscope_app.py
 cd ..
-cd image-backend && docker build --no-cache . -t image-backend-image
+cd image-backend && pip install -r requirements.txt
+python3 sd_app.py
 cd ..
-cd bot && docker build --no-cache . -t bot-image
-docker run --runtime=nvidia --mount source=videos,target=/app video-backend-image
-docker run --runtime=nvidia --mount source=images,target=/app image-backend-image
-docker run --mount source=videos,target=/app --mount source=images,target=/app bot-image
+cd bot && node bot.js
