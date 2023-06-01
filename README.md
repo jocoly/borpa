@@ -16,7 +16,7 @@ I made this because other options were not what I wanted or were prohibitively e
 
 ### Built on:
 
--[Stable Diffusion 2](https://github.com/Stability-AI/stablediffusion) 2.0 for image generation
+-[Stable Diffusion 2](https://github.com/Stability-AI/stablediffusion) for image generation
 
 -[Modelscope text-to-video](https://huggingface.co/spaces/damo-vilab/modelscope-text-to-video-synthesis) for video generation
 
