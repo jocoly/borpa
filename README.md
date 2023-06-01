@@ -1,6 +1,6 @@
 # borpa
 
-## 2.0 Beta Release: Text-to-Video
+## Beta Release: Text-to-Video
 
 Type !video \<prompt\> for a 2-second video.
 
