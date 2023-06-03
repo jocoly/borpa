@@ -97,7 +97,7 @@ Tweak the other settings to suit your needs at your own risk.
 
 `./video-backend/install.sh`
 
-Sometimes the model download crashes on Modelscope's end; just try again if it does.
+Sometimes the model download crashes on the download host's end; just try again if it does.
 
 ### 5. Start the video server (This takes a while if models aren't downloaded.)
 
