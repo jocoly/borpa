@@ -53,7 +53,7 @@ I made this because other options were not what I wanted or were prohibitively e
 | Requirements                                                                                                                    | Description                                                                                                                                                                                                                                     |
 |---------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **An Nvidia CUDA-enabled GPU (not required for images but dramatically speeds up image processing; mandatory for text-to-vid)** | [Full list of CUDA-enabled GPUs](https://developer.nvidia.com/cuda-gpus)                                                                                                                                                                        |
-| **12GB of VRAM if you want to use text-to-video**                                                                               | TODO: Low-VRAM or CPU options                                                                                                                                                                                                                   |
+| **16GB of VRAM if you want to use text-to-video**                                                                               | TODO: Low-VRAM or CPU options                                                                                                                                                                                                                   |
 | **A valid Discord application token**                                                                                           | [Reactiflux guide on creating a new Discord bot](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)<br />Be sure that the bot is added to the intended server and has the 'GuildMessages' intent enabled. |
 | **A valid OpenAI API token (required for GPT completion but not needed for Stable Diffusion image generation)**                 | [OpenAI API Key Manager](https://platform.openai.com/account/api-keys)                                                                                                                                                                          |                                                                                                                                                         |
 
@@ -118,7 +118,7 @@ Sometimes the model download crashes on the download host's end; just try again 
 `cd backend && python3 app.py`
 
 ### 6. In a new terminal window, start the bot.
-`cd ./bot && node bot.js`
+`cd bot && node bot.js`
 
 ### The bot should now be online. Type !test to generate a test message.
   
@@ -134,5 +134,5 @@ Sometimes the model download crashes on the download host's end; just try again 
 
 ### TODO:
 
-- Low-vram video function
+- Low-vram video alternative
 
