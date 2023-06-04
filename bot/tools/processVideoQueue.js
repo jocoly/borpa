@@ -68,7 +68,6 @@ export async function processVideoQueue(prompt) {
                     console.error('Error sending video:', error)
                 }
             }
-
             const message = await msg.channel.messages.fetch(msg.id).catch((error) => {
                 console.error('Error fetching message:', error);
                 return null;
@@ -77,6 +76,9 @@ export async function processVideoQueue(prompt) {
                 try {
                     const file = fs.readFileSync(videoFile);
                     await message.reply({files: [{attachment: file, name: videoFile}]});
+                    for (const result of results) {
+                        await fs.unlinkSync(result.videoFilePath)
+                    }
                 } catch (error) {
                     console.error('Error sending video:', error);
                 }

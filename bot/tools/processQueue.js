@@ -72,6 +72,9 @@ export async function processQueue(prompt, numImages) {
             }
             const message = await msg.channel.messages.fetch(msg.id).catch(() => null);
             await message.reply({files:resultsArray});
+            for (const result of results) {
+                await fs.unlinkSync(result.imageFilePath)
+            }
         }
         if (queue.requests.length === 0) {
             queueState.processing = false;

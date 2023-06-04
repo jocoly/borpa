@@ -11,7 +11,7 @@ export async function callDalleService(backendUrl, text, numImages) {
     const queryStartTime = new Date();
 
     const response = await Promise.race([
-        fetch("http://" + backendUrl + `/generateImage`, {
+        fetch("http://" + backendUrl + "/generateImage", {
             method: 'POST',
             headers: {
                 'Bypass-Tunnel-Reminder': "go",
@@ -57,7 +57,7 @@ export async function callTextToVideoService (videoBackendUrl, prompt, seed) {
     const queryStartTime = new Date();
 
     const response = await Promise.race([
-        fetch("http://" + videoBackendUrl + `/generateVideo`, {
+        fetch("http://" + videoBackendUrl + "/generateVideo", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

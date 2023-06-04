@@ -77,12 +77,12 @@ def generate_image(prompt: str, num_images: int):
 
 @app.route("/generateImage", methods=["POST"])
 def generate_images_api():
+    print("Request received")
     json_data = request.get_json(force=True)
     text_prompt = json_data["text"]
     num_images = json_data["num_images"]
 
-    with processing_lock:
-        generated_images = generate_image(text_prompt, num_images)
+    generated_images = generate_image(text_prompt, num_images)
 
     response = {'generatedImgs': generated_images,
                 'generatedImgsFormat': 'png'}
@@ -134,7 +134,6 @@ def generate_video_api():
 
 
 @app.route("/", methods=["GET"])
-@cross_origin()
 def health_check():
     return jsonify(success=True)
 
