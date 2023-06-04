@@ -78,9 +78,9 @@ Tweak the other settings to suit your needs at your own risk.
 
 `CONTAIN_BOT=true`
 
-`DISCORD_CHANNEL_ID=<Channel ID of the channel to which the bot should be confined>`
+`DISCORD_CHANNEL_ID=<Channel ID for CONTAIN_BOT & SELF_DRAW/ANIMATE>`
 
-`BACKEND_URL=http://127.0.0.1:8000`
+`BACKEND_URL=127.0.0.1`
 
 `IMAGE_PORT=8000`
 
@@ -91,6 +91,22 @@ Tweak the other settings to suit your needs at your own risk.
 `IMAGE_INFERENCE_STEPS=70`
 
 `MAX_NUM_IMGS=4`
+
+`IMAGE_GUIDANCE_SCAL=16`
+
+`IMAGE_WIDTH=512`
+
+`IMAGE_HEIGHT=512`
+
+`VIDEO_INFERENCE_STEPS=70`
+
+`NUM_FRAMES=20`
+
+`VIDEO_GUIDANCE_SCALE=16`
+
+`VIDEO_WIDTH=256`
+
+`VIDEO_HEIGHT=256`
 
 `SELF_DRAW=true`
 
@@ -107,11 +123,13 @@ Tweak the other settings to suit your needs at your own risk.
 `CHAT_TEMPERATURE=0.7`
 
 
-### 4. Install the video models if you want to use text-to-vid
+### 4. Install the requirements and video models if you want to use text-to-vid
 
 `./backend/install.sh`
 
-Sometimes the model download crashes on the download host's end; just try again if it does.
+or just `pip install -r requirements.txt` if you just want the image service.
+
+Sometimes the video model download crashes on the download host's end; just try again if it does.
 
 ### 5. Start the backend server (This takes a while if models aren't downloaded.)
 
@@ -124,9 +142,9 @@ Sometimes the model download crashes on the download host's end; just try again 
   
 ### FAQ
 
-- Images save to ./image-backend/output/images/
+- Images save to ./backend/output/images/ by default.
 
-- Videos save as gifs (so Discord properly displays them on mobile) to ./video-backend/output/videos/
+- Videos save as gifs (so Discord properly displays them on mobile) to ./backend/output/videos/ by default.
 
 - `CONTAIN_BOT` will make the bot ignore messages that aren't in the channel matching the provided channel id.
 
