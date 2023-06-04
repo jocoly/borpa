@@ -7,7 +7,7 @@ import {waitForFileToComplete} from "./waitForFileToComplete.js";
 const REQUEST_TIMEOUT_SEC = 120000
 export async function callDalleService(backendUrl, text, numImages) {
 
-    const output_dir = "../image-backend/output/images/"
+    const output_dir = "../backend/output/images/"
     const queryStartTime = new Date();
 
     const response = await Promise.race([
@@ -53,6 +53,7 @@ export async function callDalleService(backendUrl, text, numImages) {
 
 export async function callTextToVideoService (videoBackendUrl, prompt, seed) {
 
+    const output_dir = "../backend/output/videos/"
     const queryStartTime = new Date();
 
     const response = await Promise.race([
@@ -77,7 +78,7 @@ export async function callTextToVideoService (videoBackendUrl, prompt, seed) {
     const results = [];
 
     const videoFileName = path.basename(actualOutPath);
-    const videoPath = path.join('C:/Users/Colin/PycharmProjects/borpa/video-backend/output/videos/', videoFileName)
+    const videoPath = path.join(output_dir, videoFileName)
 
     results.push({
         executionTime: Math.round(((new Date() - queryStartTime) / 1000 + Number.EPSILON) * 100) / 100,
