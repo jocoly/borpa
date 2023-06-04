@@ -30,8 +30,11 @@ I made this because other options were not what I wanted or were prohibitively e
   `!chat <PROMPT GOES HERE>`
   -Sends a GPT text completion generated with the prompt that follows the command.
 
-  `!drawsomething <PROMPT GOES HERE>`
+  `!drawsomething`
   -The bot creates a prompt, optimizes it, and sends it with a '!draw' command.
+
+  `!animatesomething`
+  --The bot creates a prompt, optimizes it, and sends it with a '!video' command.
   
   `!draw <PROMPT GOES HERE>`
   -Sends a Stable Diffusion image generated with the prompt that follows the command.
@@ -69,23 +72,23 @@ Add your Discord and OpenAI tokens.
 
 Tweak the other settings to suit your needs at your own risk.
 
-`TOKEN=<Discord Token goes here>`
-
-`CONTAIN_BORPA=true`
-
-`DISCORD_CHANNEL_ID=<Channel ID of the channel to which the bot should be confined>`
-
-`IMAGE_BACKEND_URL=http://127.0.0.1:8000`
-
-`VIDEO_BACKEND_URL=http://127.0.0.1:8001`
+`DISCORD_TOKEN=<Discord Token goes here>`
 
 `OPENAI_TOKEN=sk-SAMPLETOKENkalspdj2klja4kdfj2l2a2u6iugoiu`
 
-`OPENAI_MODEL=text-davinci-003`
+`CONTAIN_BOT=true`
 
-`CHAT_PROMPT_MAX_TOKENS=250`
+`DISCORD_CHANNEL_ID=<Channel ID of the channel to which the bot should be confined>`
 
-`CHAT_TEMPERATURE=0.7`
+`BACKEND_URL=http://127.0.0.1:8000`
+
+`IMAGE_PORT=8000`
+
+`VIDEO_PORT=8001`
+
+`DELETE_AFTER_SENDING=true`
+
+`IMAGE_INFERENCE_STEPS=70`
 
 `MAX_NUM_IMGS=4`
 
@@ -93,22 +96,28 @@ Tweak the other settings to suit your needs at your own risk.
 
 `SELF_DRAW_INTERVAL_MILLISECONDS=3600000`
 
+`SELF_ANIMATE=true`
+
+`SELF_ANIMATE_INTERVAL_MILLISECONDS=3600000`
+
+`OPENAI_MODEL=text-davinci-003`
+
+`CHAT_PROMPT_MAX_TOKENS=250`
+
+`CHAT_TEMPERATURE=0.7`
+
+
 ### 4. Install the video models if you want to use text-to-vid
 
-`./video-backend/install.sh`
+`./backend/install.sh`
 
 Sometimes the model download crashes on the download host's end; just try again if it does.
 
-### 5. Start the video server (This takes a while if models aren't downloaded.)
+### 5. Start the backend server (This takes a while if models aren't downloaded.)
 
-**CUDA-enabled GPU required. Probably at least 12GB of VRAM too if you don't want it to crash frequently**
+`cd backend && python3 app.py`
 
-`cd video-backend && python3 modelscope_app.py`
-
-### 6. In a new terminal window, start the image server.
-`cd ./image-backend && python3 sd_app.py`
-
-### 7. In another new terminal window, start the bot.
+### 6. In a new terminal window, start the bot.
 `cd ./bot && node bot.js`
 
 ### The bot should now be online. Type !test to generate a test message.
@@ -119,14 +128,11 @@ Sometimes the model download crashes on the download host's end; just try again 
 
 - Videos save as gifs (so Discord properly displays them on mobile) to ./video-backend/output/videos/
 
-- `CONTAIN_BORPA` will make the bot ignore messages that aren't in the channel matching the provided channel id.
+- `CONTAIN_BOT` will make the bot ignore messages that aren't in the channel matching the provided channel id.
 
-- `SELF_DRAW` will make the bot generate its own image in the provided channel on the interval provided below. If you don't provide a channel ID, set this to false.
-
-- `SELF_DRAW_INTERVAL_MILLISECONDS` is the interval at which the bot will draw its own pictures if `SELF_DRAW` is true. Default = 1 hour.
+- `SELF_DRAW` and `SELF_ANIMATE` will make the bot generate its own image/video in the provided channel on the interval provided below. If you don't provide a channel ID, set this to false.
 
 ### TODO:
 
 - Low-vram video function
 
-- Self-draw for video
