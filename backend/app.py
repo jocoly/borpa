@@ -8,29 +8,44 @@ import random
 import torch
 import uuid
 import subprocess
+from dotenv import load_dotenv, find_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from diffusers import DiffusionPipeline
 from modelscope import pipeline
 from modelscope.outputs import OutputKeys
 
+
+ENV_DIR = '../bot/.env'
+load_dotenv(ENV_DIR)
 app = Flask(__name__)
 CORS(app)
 print("--> Starting the image and video generation server. This might take up to two minutes.")
 
-backend_address = "127.0.0.1"
-image_port = 8000
-video_port = 8001
+ENABLE_STABLE_DIFFUSION = False
+if os.getenv("ENABLE_STABLE_DIFFUSION") == 'true':
+    ENABLE_STABLE_DIFFUSION = True
+ENABLE_TEXT_TO_VIDEO = False
+if os.getenv("ENABLE_TEXT_TO_VIDEO") == 'true':
+    ENABLE_TEXT_TO_VIDEO = True
+
+backend_address = os.getenv("BACKEND_URL")
+image_port = int(os.getenv("IMAGE_PORT"))
+video_port = int(os.getenv("VIDEO_PORT"))
+
+print("CUDA-enabled gpu detected: " + str(torch.cuda.is_available()))
+if torch.cuda.is_available():
+    device = torch.device('cuda:0')
 
 # Load image model
-print("CUDA-enabled gpu: " + str(torch.cuda.is_available()))
-device = torch.device('cuda:0')
-image_pipe = DiffusionPipeline.from_pretrained('stabilityai/stable-diffusion-2-base', torch_dtype=torch.float16)
-image_pipe.to("cuda")
-inference_steps = 70
+if ENABLE_STABLE_DIFFUSION:
+    image_pipe = DiffusionPipeline.from_pretrained('stabilityai/stable-diffusion-2-base', torch_dtype=torch.float16)
+    image_pipe.to("cuda")
+    inference_steps = int(os.getenv("IMAGE_INFERENCE_STEPS"))
 
 # Load video model
-video_pipe = pipeline('text-to-video-synthesis', 'damo/text-to-video-synthesis', map_location=device)
+if ENABLE_TEXT_TO_VIDEO:
+    video_pipe = pipeline('text-to-video-synthesis', 'damo/text-to-video-synthesis', map_location=device)
 
 processing_lock = threading.Lock()
 
@@ -114,7 +129,7 @@ def generate_video_api():
 
     print(f"Created video from text prompt [{text_prompt}]")
 
-    response = {'actualOutPath': generated_video[0]}
+    response = {'generatedVideo': generated_video[0]}
     return jsonify(response)
 
 
@@ -126,7 +141,7 @@ def health_check():
 
 def convert_to_gif(mp4_file_path):
     gif_file_path = mp4_file_path[:-4] + ".gif"
-    subprocess.run(['ffmpeg', '-i', mp4_file_path, '-vf', 'fps=10,scale=320:-1:flags=lanczos', gif_file_path])
+    subprocess.run(['ffmpeg', '-i', mp4_file_path, '-vf', 'fps=10,scale=320:-1:flags=lanczos', gif_file_path, '-nostats'])
     return gif_file_path
 
 

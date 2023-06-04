@@ -36,7 +36,7 @@ export async function processVideoQueue(prompt) {
         }, 5000);
     } try {
         const results = await Promise.race([
-            callTextToVideoService(process.env.VIDEO_BACKEND_URL, prompt, -1),
+            callTextToVideoService(process.env.BACKEND_URL + ":" + process.env.VIDEO_PORT, prompt, -1),
             new Promise(resolve => setTimeout(() => resolve({timeout: true}), TIMEOUT))
         ]);
         if (results.timeout) {

@@ -37,7 +37,7 @@ export async function processQueue(prompt, numImages) {
     }
     try {
         const results = await Promise.race([
-            callDalleService(process.env.IMAGE_BACKEND_URL, prompt, numImages),
+            callDalleService(process.env.BACKEND_URL + ":" + process.env.IMAGE_PORT, prompt, numImages),
             new Promise(resolve => setTimeout(() => resolve({timeout: true}), TIMEOUT))
         ]);
         if (results.timeout) {

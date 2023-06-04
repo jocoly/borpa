@@ -6,7 +6,8 @@ export const commands = {
     chat: "chat",
     txt2vid: "txt2vid",
     vid: "vid",
-    video: "video"
+    video: "video",
+    animateSomething: "animatesomething",
 }
 
 export const prefixes = {

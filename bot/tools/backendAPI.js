@@ -11,7 +11,7 @@ export async function callDalleService(backendUrl, text, numImages) {
     const queryStartTime = new Date();
 
     const response = await Promise.race([
-        fetch(backendUrl + `/generateImage`, {
+        fetch("http://" + backendUrl + `/generateImage`, {
             method: 'POST',
             headers: {
                 'Bypass-Tunnel-Reminder': "go",
@@ -57,7 +57,7 @@ export async function callTextToVideoService (videoBackendUrl, prompt, seed) {
     const queryStartTime = new Date();
 
     const response = await Promise.race([
-        fetch(videoBackendUrl + `/generateVideo`, {
+        fetch("http://" + videoBackendUrl + `/generateVideo`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -74,10 +74,10 @@ export async function callTextToVideoService (videoBackendUrl, prompt, seed) {
         new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), REQUEST_TIMEOUT_SEC))
     ]);
 
-    const {actualOutPath, _} = await response.json();
+    const {generatedVideo, _} = await response.json();
     const results = [];
 
-    const videoFileName = path.basename(actualOutPath);
+    const videoFileName = path.basename(generatedVideo);
     const videoPath = path.join(output_dir, videoFileName)
 
     results.push({
