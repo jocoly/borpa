@@ -19,7 +19,7 @@ backend_address = "127.0.0.1"
 port = 8001
 
 # Load model
-# If you have one GPU (with CUDA drivers) this will use it
+print("CUDA-enabled gpu: " + str(torch.cuda.is_available()))
 device = torch.device('cuda:0')
 pipe = pipeline('text-to-video-synthesis', 'damo/text-to-video-synthesis', map_location=device)
 
