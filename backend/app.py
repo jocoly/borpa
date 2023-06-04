@@ -32,6 +32,8 @@ inference_steps = 70
 # Load video model
 video_pipe = pipeline('text-to-video-synthesis', 'damo/text-to-video-synthesis', map_location=device)
 
+processing_lock = threading.Lock()
+
 
 def generate_image(prompt: str, num_images: int):
     start_time = time.time()
@@ -58,14 +60,14 @@ def generate_image(prompt: str, num_images: int):
     return image_output
 
 
-@app.route("/generate", methods=["POST"])
-@cross_origin()
+@app.route("/generateImage", methods=["POST"])
 def generate_images_api():
     json_data = request.get_json(force=True)
     text_prompt = json_data["text"]
     num_images = json_data["num_images"]
 
-    generated_images = generate_image(text_prompt, num_images)
+    with processing_lock:
+        generated_images = generate_image(text_prompt, num_images)
 
     response = {'generatedImgs': generated_images,
                 'generatedImgsFormat': 'png'}
@@ -103,12 +105,12 @@ def generate_video(prompt: str, seed: int):
 
 
 @app.route("/generateVideo", methods=["POST"])
-@cross_origin()
 def generate_video_api():
     json_data = request.get_json(force=True)
     text_prompt = json_data["text"]
 
-    generated_video = generate_video(text_prompt, -1)
+    with processing_lock:
+        generated_video = generate_video(text_prompt, -1)
 
     print(f"Created video from text prompt [{text_prompt}]")
 

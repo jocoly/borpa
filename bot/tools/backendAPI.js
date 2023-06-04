@@ -11,7 +11,7 @@ export async function callDalleService(backendUrl, text, numImages) {
     const queryStartTime = new Date();
 
     const response = await Promise.race([
-        fetch(backendUrl + `/generate`, {
+        fetch(backendUrl + `/generateImage`, {
             method: 'POST',
             headers: {
                 'Bypass-Tunnel-Reminder': "go",
